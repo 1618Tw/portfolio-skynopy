@@ -132,21 +132,10 @@ export const projects: Project[] = [
       "Hands-on study of every leading image and video generation model — closed and open source",
       "Mapped the new VFX toolset and how to actually use it in production",
     ],
-    thumbnail: "/projects/hypermind/UBIQ 4.png",
+    thumbnail:
+      "/projects/hypermind/app icon -macOS-Default-1024x1024@1x 1.png",
     dark: true,
     modalCardBg: "#0A0E1F",
-    marqueeLabel: "Product visuals",
-    marquee: [
-      "/projects/hypermind/Group 250.png",
-      "/projects/hypermind/Group 251.png",
-      "/projects/hypermind/Group 252.png",
-      "/projects/hypermind/Group 253.png",
-    ],
-    images: [
-      "/projects/hypermind/Frame 20.png",
-      "/projects/hypermind/Visual 2.1.png",
-      "/projects/hypermind/City visual.png",
-    ],
   },
   {
     slug: "vaseline",

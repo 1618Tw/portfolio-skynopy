@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Project } from "@/data/projects";
+import HypermindLayout from "./projects/HypermindLayout";
 
 interface Theme {
   bg: string;
@@ -101,7 +102,11 @@ export default function ProjectPage({ project, onClose }: Props) {
             color: (THEMES[project.slug] ?? DEFAULT_THEME).text,
           }}
         >
-          <PageInner project={project} onClose={onClose} />
+          {project.slug === "hypermind" ? (
+            <HypermindLayout project={project} onClose={onClose} />
+          ) : (
+            <PageInner project={project} onClose={onClose} />
+          )}
         </motion.div>
       )}
     </AnimatePresence>
