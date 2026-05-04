@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Project } from "@/data/projects";
+import { asset } from "@/lib/asset";
 
 interface Props {
   project: Project;
@@ -21,7 +22,7 @@ export default function ProjectCard({ project, index, onClick }: Props) {
         <div className="card-hover__media absolute inset-0 flex items-center justify-center p-8 sm:p-10 transition-transform duration-[600ms] [transition-timing-function:var(--ease-out)]">
           {project.thumbnail ? (
             <Image
-              src={project.thumbnail}
+              src={asset(project.thumbnail)}
               alt={project.title}
               width={800}
               height={1000}

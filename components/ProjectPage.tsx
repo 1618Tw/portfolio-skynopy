@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Project } from "@/data/projects";
+import { asset } from "@/lib/asset";
 
 interface Theme {
   bg: string;
@@ -148,7 +149,7 @@ function PageInner({
               style={{ background: theme.surface }}
             >
               <Image
-                src={src}
+                src={asset(src)}
                 alt={`${project.title} ${i + 1}`}
                 width={1600}
                 height={1200}
@@ -322,7 +323,7 @@ function HypermindLeft({ theme }: { theme: Theme }) {
       {/* Hero */}
       <div className="relative w-full" style={{ background: theme.surface }}>
         <Image
-          src={HM.hero}
+          src={asset(HM.hero)}
           alt="Hypermind — Your private AI"
           width={2855}
           height={1595}
@@ -345,7 +346,7 @@ function HypermindLeft({ theme }: { theme: Theme }) {
             style={{ background: theme.surface }}
           >
             <Image
-              src={src}
+              src={asset(src)}
               alt={`Hypermind product ${i + 1}`}
               width={1600}
               height={1000}
@@ -364,7 +365,7 @@ function HypermindLeft({ theme }: { theme: Theme }) {
         style={{ background: theme.surface }}
       >
         <Image
-          src={HM.wide}
+          src={asset(HM.wide)}
           alt="Local AI for your family, and no one else"
           width={2855}
           height={1595}
@@ -382,7 +383,7 @@ function HypermindLeft({ theme }: { theme: Theme }) {
       >
         <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44">
           <Image
-            src={HM.iconLight}
+            src={asset(HM.iconLight)}
             alt="UBIQ icon — light"
             fill
             sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
@@ -393,7 +394,7 @@ function HypermindLeft({ theme }: { theme: Theme }) {
         </div>
         <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44">
           <Image
-            src={HM.iconDark}
+            src={asset(HM.iconDark)}
             alt="UBIQ icon — dark"
             fill
             sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
@@ -407,7 +408,7 @@ function HypermindLeft({ theme }: { theme: Theme }) {
       {/* Finale — backpack */}
       <div className="relative w-full mt-px" style={{ background: "#F5F1EC" }}>
         <Image
-          src={HM.finale}
+          src={asset(HM.finale)}
           alt="UBIQ — Your personal intelligence, always with you"
           width={2855}
           height={2855}
