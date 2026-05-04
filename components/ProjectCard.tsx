@@ -19,18 +19,27 @@ export default function ProjectCard({ project, index, onClick }: Props) {
         style={{ background: project.cardBg }}
       >
         <div className="card-hover__media absolute inset-0 flex items-center justify-center p-8 sm:p-10 transition-transform duration-[600ms] [transition-timing-function:var(--ease-out)]">
-          <Image
-            src={project.thumbnail}
-            alt={project.title}
-            width={800}
-            height={1000}
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="max-w-full max-h-full w-auto h-auto object-contain"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
-            unoptimized
-          />
+          {project.thumbnail ? (
+            <Image
+              src={project.thumbnail}
+              alt={project.title}
+              width={800}
+              height={1000}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className="max-w-full max-h-full w-auto h-auto object-contain"
+              unoptimized
+            />
+          ) : (
+            <span
+              className="font-display uppercase text-center leading-[0.92] tracking-[-0.02em]"
+              style={{
+                fontSize: "clamp(1.5rem, 4vw, 2.75rem)",
+                color: project.cardDark ? "#FFFFFF" : "#0A0A0A",
+              }}
+            >
+              {project.title}
+            </span>
+          )}
         </div>
 
         {isExternal && (

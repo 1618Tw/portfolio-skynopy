@@ -85,7 +85,7 @@ export const projects: Project[] = [
       "Shot brand and lifestyle content on the ground",
       "Planned and scoped website changes",
     ],
-    thumbnail: "/projects/clubhouse/thumbnail.jpg",
+    thumbnail: "",
     modalCardBg: "#FAF3E5",
   },
   {
@@ -164,7 +164,7 @@ export const projects: Project[] = [
       "Young One Silver Pencil — The One Club, New York",
       "Young One Bronze Pencil — The One Club, New York",
     ],
-    thumbnail: "/projects/design-awards/vaseline.jpg",
+    thumbnail: "",
     externalUrl:
       "https://www.behance.net/gallery/223117875/THE-JOLLY-JELLY-Vaseline-The-One-Show-Young-ones",
   },
@@ -183,7 +183,7 @@ export const projects: Project[] = [
       "Communication campaign built on a real Depop brief",
       "New Blood Wooden Pencil — D&AD, London",
     ],
-    thumbnail: "/projects/design-awards/depub.jpg",
+    thumbnail: "",
     externalUrl:
       "https://www.behance.net/gallery/223145371/DEPUB-Depop-D-AD-New-Blood-Awards",
   },
