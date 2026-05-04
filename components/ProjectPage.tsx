@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Project } from "@/data/projects";
-import HypermindLayout from "./projects/HypermindLayout";
 
 interface Theme {
   bg: string;
@@ -102,11 +101,7 @@ export default function ProjectPage({ project, onClose }: Props) {
             color: (THEMES[project.slug] ?? DEFAULT_THEME).text,
           }}
         >
-          {project.slug === "hypermind" ? (
-            <HypermindLayout project={project} onClose={onClose} />
-          ) : (
-            <PageInner project={project} onClose={onClose} />
-          )}
+          <PageInner project={project} onClose={onClose} />
         </motion.div>
       )}
     </AnimatePresence>
@@ -141,9 +136,11 @@ function PageInner({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      {/* LEFT — image stack ─────────────────────────────── */}
+      {/* LEFT — image composition ─────────────────────── */}
       <div className="flex flex-col">
-        {images.length > 0 ? (
+        {project.slug === "hypermind" ? (
+          <HypermindLeft theme={theme} />
+        ) : images.length > 0 ? (
           images.map((src, i) => (
             <div
               key={`${src}-${i}`}
@@ -299,5 +296,127 @@ function PageInner({
         </div>
       </aside>
     </div>
+  );
+}
+
+/* ───────────────── Hypermind left column composition ───────────────── */
+
+const HM = {
+  hero: "/projects/hypermind/Visual 2 1.png",
+  grid: [
+    "/projects/hypermind/Group 22 1.png",
+    "/projects/hypermind/Group 24 1.png",
+    "/projects/hypermind/Group 25 1.png",
+    "/projects/hypermind/Group 31 1.png",
+  ],
+  wide: "/projects/hypermind/A4 - 2 1.png",
+  iconLight:
+    "/projects/hypermind/app icon -macOS-Default-1024x1024@1x 1.png",
+  iconDark: "/projects/hypermind/app icon -macOS-Dark-1024x1024@1x 1.png",
+  finale: "/projects/hypermind/Backpack UBIQ 1.png",
+};
+
+function HypermindLeft({ theme }: { theme: Theme }) {
+  return (
+    <>
+      {/* Hero */}
+      <div className="relative w-full" style={{ background: theme.surface }}>
+        <Image
+          src={HM.hero}
+          alt="Hypermind — Your private AI"
+          width={2855}
+          height={1595}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="w-full h-auto block"
+          unoptimized
+          priority
+        />
+      </div>
+
+      {/* 2×2 grid */}
+      <div
+        className="grid grid-cols-2 gap-px"
+        style={{ background: theme.border }}
+      >
+        {HM.grid.map((src, i) => (
+          <div
+            key={i}
+            className="relative w-full"
+            style={{ background: theme.surface }}
+          >
+            <Image
+              src={src}
+              alt={`Hypermind product ${i + 1}`}
+              width={1600}
+              height={1000}
+              sizes="(max-width: 768px) 50vw, 25vw"
+              className="w-full h-auto block"
+              unoptimized
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Wide — Local AI for your family */}
+      <div
+        className="relative w-full mt-px"
+        style={{ background: theme.surface }}
+      >
+        <Image
+          src={HM.wide}
+          alt="Local AI for your family, and no one else"
+          width={2855}
+          height={1595}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="w-full h-auto block"
+          unoptimized
+          loading="lazy"
+        />
+      </div>
+
+      {/* App icons pair */}
+      <div
+        className="flex items-center justify-center gap-4 sm:gap-6 px-6 py-16 sm:py-24 mt-px"
+        style={{ background: theme.surface }}
+      >
+        <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44">
+          <Image
+            src={HM.iconLight}
+            alt="UBIQ icon — light"
+            fill
+            sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
+            className="object-contain"
+            unoptimized
+            loading="lazy"
+          />
+        </div>
+        <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44">
+          <Image
+            src={HM.iconDark}
+            alt="UBIQ icon — dark"
+            fill
+            sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
+            className="object-contain"
+            unoptimized
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      {/* Finale — backpack */}
+      <div className="relative w-full mt-px" style={{ background: "#F5F1EC" }}>
+        <Image
+          src={HM.finale}
+          alt="UBIQ — Your personal intelligence, always with you"
+          width={2855}
+          height={2855}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="w-full h-auto block"
+          unoptimized
+          loading="lazy"
+        />
+      </div>
+    </>
   );
 }
