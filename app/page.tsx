@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { projects, Project } from "@/data/projects";
 import ProjectGrid from "@/components/ProjectGrid";
-import ProjectModal from "@/components/ProjectModal";
+import ProjectPage from "@/components/ProjectPage";
 
 export default function Home() {
   const [open, setOpen] = useState<Project | null>(null);
@@ -101,7 +101,7 @@ export default function Home() {
           </a>
         </footer>
 
-        <ProjectModal project={open} onClose={() => setOpen(null)} />
+        <ProjectPage project={open} onClose={() => setOpen(null)} />
       </main>
     </>
   );
