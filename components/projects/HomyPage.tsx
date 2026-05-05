@@ -159,7 +159,7 @@ export default function HomyPage({
         className="md:sticky md:top-0 md:h-screen md:overflow-y-auto"
         style={{ background: "#FFFFFF", color: BLACK }}
       >
-        <div className="relative h-full px-10 sm:px-14 lg:px-20 py-12 sm:py-16 lg:py-20">
+        <div className="relative h-full pl-14 sm:pl-24 lg:pl-32 pr-8 sm:pr-12 lg:pr-16 pt-24 sm:pt-32 lg:pt-40 pb-12 sm:pb-16">
           {/* Close */}
           <button
             onClick={onClose}
@@ -182,14 +182,14 @@ export default function HomyPage({
           </h1>
 
           {/* Body */}
-          <div className="mt-8 sm:mt-10 max-w-[36ch] flex flex-col gap-4 text-[14.5px] sm:text-[15px] leading-[1.5]">
+          <div className="mt-14 sm:mt-20 max-w-[36ch] flex flex-col gap-5 text-[14.5px] sm:text-[15px] leading-[1.55]">
             {BODY.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
           </div>
 
           {/* Stats grid (Didone serif numbers in black) */}
-          <div className="mt-14 sm:mt-20 grid grid-cols-2 gap-y-12 gap-x-10 max-w-md">
+          <div className="mt-20 sm:mt-28 grid grid-cols-2 gap-y-14 gap-x-12 max-w-md">
             {STATS.map((s, i) => (
               <div key={i}>
                 <div
