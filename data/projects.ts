@@ -6,6 +6,7 @@ export interface ProjectStat {
 export type CompositionSlot =
   | "hero"
   | "grid"
+  | "splitTop"
   | "wide"
   | "iconPair"
   | "finale"
@@ -14,8 +15,19 @@ export type CompositionSlot =
 export interface VideoStack {
   /** Path to a self-hosted video file (mp4). Leave empty to render placeholder. */
   video?: string;
+  /**
+   * CSS aspect-ratio string for the video container (matches the source file).
+   * Defaults to "9 / 16" (portrait phone video).
+   */
+  videoAspect?: string;
   /** Up to 2 images stacked on the right of the video. */
   images: [string?, string?];
+}
+
+/** Two stacked images on the left + one tall image on the right (full-height). */
+export interface SplitTop {
+  left: [string?, string?];
+  right?: string;
 }
 
 /**
@@ -37,6 +49,8 @@ export interface ProjectComposition {
   finale?: string;
   /** Optional background for the finale section (e.g. native canvas color of the asset) */
   finaleBg?: string;
+  /** Asymmetric split: 2 stacked images left + 1 tall image right */
+  splitTop?: SplitTop;
   /** Bottom split row: video on the left, two stacked photos on the right */
   videoStack?: VideoStack;
 }
@@ -165,16 +179,18 @@ export const projects: Project[] = [
       { value: "×3", label: "Growth in ticket sales" },
     ],
     composition: {
-      slots: ["grid", "wide", "videoStack"],
-      grid: [
-        "/projects/jugaad/jugaad behance 1-02.png",
-        "/projects/jugaad/DSC01650.JPG",
-        "/projects/jugaad/jugaad behance 1-03.png",
-        "/projects/jugaad/DSC01828.JPG",
-      ],
+      slots: ["splitTop", "wide", "videoStack"],
+      splitTop: {
+        left: [
+          "/projects/jugaad/jugaad behance 1-02.png",
+          "/projects/jugaad/jugaad behance 1-03.png",
+        ],
+        right: "/projects/jugaad/DSC01650.JPG",
+      },
       wide: "/projects/jugaad/DSC01875.JPG",
       videoStack: {
         video: "/projects/jugaad/jugaadportfo.mp4",
+        videoAspect: "9 / 16",
         images: [
           "/projects/jugaad/DSC01660.JPG",
           "/projects/jugaad/DSC01853.JPG",

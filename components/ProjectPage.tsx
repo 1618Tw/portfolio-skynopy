@@ -446,17 +446,88 @@ function SlotRenderer({
         <Placeholder theme={theme} aspect="1 / 1" label="Finale" />
       );
 
-    case "videoStack": {
-      const v = composition.videoStack;
+    case "splitTop": {
+      const st = composition.splitTop;
       return (
         <div
-          className="grid grid-cols-2 gap-px mt-px"
+          className="grid grid-cols-2 grid-rows-2 gap-px aspect-square mt-px"
           style={{ background: theme.border }}
         >
-          {/* Left: video */}
+          {/* Top-left */}
           <div
-            className="relative aspect-square overflow-hidden"
+            className="relative col-start-1 row-start-1 overflow-hidden"
             style={{ background: theme.surface }}
+          >
+            {st?.left?.[0] ? (
+              <Image
+                src={asset(st.left[0])}
+                alt={`${projectTitle} 1`}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover"
+                unoptimized
+                priority
+              />
+            ) : (
+              <SlotPlaceholderInner theme={theme} label="Photo 1" />
+            )}
+          </div>
+
+          {/* Tall right (spans rows 1-2) */}
+          <div
+            className="relative col-start-2 row-start-1 row-span-2 overflow-hidden"
+            style={{ background: theme.surface }}
+          >
+            {st?.right ? (
+              <Image
+                src={asset(st.right)}
+                alt={`${projectTitle} feature`}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover"
+                unoptimized
+                priority
+              />
+            ) : (
+              <SlotPlaceholderInner theme={theme} label="Tall photo" />
+            )}
+          </div>
+
+          {/* Bottom-left */}
+          <div
+            className="relative col-start-1 row-start-2 overflow-hidden"
+            style={{ background: theme.surface }}
+          >
+            {st?.left?.[1] ? (
+              <Image
+                src={asset(st.left[1])}
+                alt={`${projectTitle} 2`}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover"
+                unoptimized
+                loading="lazy"
+              />
+            ) : (
+              <SlotPlaceholderInner theme={theme} label="Photo 2" />
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    case "videoStack": {
+      const v = composition.videoStack;
+      const videoAspect = v?.videoAspect ?? "9 / 16";
+      return (
+        <div
+          className="grid grid-cols-2 gap-px mt-px items-stretch"
+          style={{ background: theme.border }}
+        >
+          {/* Left: video at its natural aspect */}
+          <div
+            className="relative overflow-hidden"
+            style={{ aspectRatio: videoAspect, background: theme.surface }}
           >
             {v?.video ? (
               <video
@@ -469,21 +540,11 @@ function SlotRenderer({
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <div
-                className="absolute inset-0 flex items-center justify-center"
-                style={{
-                  border: `1px dashed ${theme.muted}`,
-                  color: theme.muted,
-                }}
-              >
-                <span className="text-[11px] uppercase tracking-[0.24em]">
-                  Video
-                </span>
-              </div>
+              <SlotPlaceholderInner theme={theme} label="Video" />
             )}
           </div>
 
-          {/* Right: 2 stacked photos */}
+          {/* Right: 2 stacked photos that fill the matched column height */}
           <div
             className="grid grid-rows-2 gap-px"
             style={{ background: theme.border }}
@@ -493,7 +554,7 @@ function SlotRenderer({
               return (
                 <div
                   key={j}
-                  className="relative aspect-[2/1] overflow-hidden"
+                  className="relative overflow-hidden min-h-0"
                   style={{ background: theme.surface }}
                 >
                   {src ? (
@@ -507,17 +568,7 @@ function SlotRenderer({
                       loading="lazy"
                     />
                   ) : (
-                    <div
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{
-                        border: `1px dashed ${theme.muted}`,
-                        color: theme.muted,
-                      }}
-                    >
-                      <span className="text-[11px] uppercase tracking-[0.24em]">
-                        Photo {j + 1}
-                      </span>
-                    </div>
+                    <SlotPlaceholderInner theme={theme} label={`Photo ${j + 1}`} />
                   )}
                 </div>
               );
@@ -527,6 +578,26 @@ function SlotRenderer({
       );
     }
   }
+}
+
+function SlotPlaceholderInner({
+  theme,
+  label,
+}: {
+  theme: Theme;
+  label: string;
+}) {
+  return (
+    <div
+      className="absolute inset-0 flex items-center justify-center"
+      style={{
+        border: `1px dashed ${theme.muted}`,
+        color: theme.muted,
+      }}
+    >
+      <span className="text-[11px] uppercase tracking-[0.24em]">{label}</span>
+    </div>
+  );
 }
 
 function Placeholder({
