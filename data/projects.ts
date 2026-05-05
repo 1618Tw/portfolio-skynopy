@@ -3,6 +3,25 @@ export interface ProjectStat {
   label: string;
 }
 
+/**
+ * Composition driving the left column of a project page.
+ * Slots without an image render a placeholder so the layout
+ * stays visible while assets are still being prepared.
+ */
+export interface ProjectComposition {
+  hero?: string;
+  /** 2×2 grid — up to 4 images */
+  grid?: string[];
+  /** Full-width image after the grid */
+  wide?: string;
+  /** Two centered icons displayed side by side */
+  iconPair?: [string, string];
+  /** Full-width finale image */
+  finale?: string;
+  /** Optional background for the finale section (e.g. native canvas color of the asset) */
+  finaleBg?: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -28,6 +47,8 @@ export interface Project {
   dark?: boolean;
   /** Optional override for the modal card's background color */
   modalCardBg?: string;
+  /** Composition for the project page left column */
+  composition?: ProjectComposition;
 }
 
 export const projects: Project[] = [
@@ -67,6 +88,15 @@ export const projects: Project[] = [
       { value: "#1", label: "Weekly ranking on the App Store" },
       { value: "30+", label: "Parties organized in the network" },
     ],
+    composition: {
+      hero: "/projects/homy/Mockup homy.jpg",
+      grid: [
+        "/projects/homy/slides/1.0 homy pitch_Page_1.jpg",
+        "/projects/homy/slides/1.0 homy pitch_Page_2.jpg",
+        "/projects/homy/slides/1.0 homy pitch_Page_3.jpg",
+        "/projects/homy/slides/1.0 homy pitch_Page_4.jpg",
+      ],
+    },
   },
   {
     slug: "clubhouse",
@@ -87,6 +117,7 @@ export const projects: Project[] = [
     ],
     thumbnail: "",
     modalCardBg: "#FAF3E5",
+    composition: {},
   },
   {
     slug: "jugaad",
@@ -114,6 +145,9 @@ export const projects: Project[] = [
       { value: "4", label: "Years running, fully independent" },
       { value: "×3", label: "Growth in ticket sales" },
     ],
+    composition: {
+      hero: "/projects/jugaad/JUGAAD 2 TIGRE.png",
+    },
   },
   {
     slug: "hypermind",
@@ -136,6 +170,22 @@ export const projects: Project[] = [
       "/projects/hypermind/app icon -macOS-Default-1024x1024@1x 1.png",
     dark: true,
     modalCardBg: "#0A0E1F",
+    composition: {
+      hero: "/projects/hypermind/Visual 2 1.png",
+      grid: [
+        "/projects/hypermind/Group 22 1.png",
+        "/projects/hypermind/Group 24 1.png",
+        "/projects/hypermind/Group 25 1.png",
+        "/projects/hypermind/Group 31 1.png",
+      ],
+      wide: "/projects/hypermind/A4 - 2 1.png",
+      iconPair: [
+        "/projects/hypermind/app icon -macOS-Default-1024x1024@1x 1.png",
+        "/projects/hypermind/app icon -macOS-Dark-1024x1024@1x 1.png",
+      ],
+      finale: "/projects/hypermind/Backpack UBIQ 1.png",
+      finaleBg: "#F5F1EC",
+    },
   },
   {
     slug: "vaseline",

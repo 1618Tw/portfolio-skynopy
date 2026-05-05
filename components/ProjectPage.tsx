@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Project } from "@/data/projects";
+import { Project, ProjectComposition } from "@/data/projects";
 import { asset } from "@/lib/asset";
 
 interface Theme {
@@ -118,62 +118,15 @@ function PageInner({
 }) {
   const theme = THEMES[project.slug] ?? DEFAULT_THEME;
 
-  // Compose image list: thumbnail → marquee → images (deduped)
-  const seen = new Set<string>();
-  const images: string[] = [];
-  const push = (src?: string | string[]) => {
-    if (!src) return;
-    const arr = Array.isArray(src) ? src : [src];
-    for (const s of arr) {
-      if (s && !seen.has(s)) {
-        seen.add(s);
-        images.push(s);
-      }
-    }
-  };
-  push(project.thumbnail);
-  push(project.marquee);
-  push(project.images);
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      {/* LEFT — image composition ─────────────────────── */}
+      {/* LEFT — composed image column ─────────────────── */}
       <div className="flex flex-col">
-        {project.slug === "hypermind" ? (
-          <HypermindLeft theme={theme} />
-        ) : images.length > 0 ? (
-          images.map((src, i) => (
-            <div
-              key={`${src}-${i}`}
-              className="relative w-full"
-              style={{ background: theme.surface }}
-            >
-              <Image
-                src={asset(src)}
-                alt={`${project.title} ${i + 1}`}
-                width={1600}
-                height={1200}
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="w-full h-auto block"
-                unoptimized
-                loading={i < 2 ? "eager" : "lazy"}
-                priority={i === 0}
-              />
-            </div>
-          ))
-        ) : (
-          <div
-            className="flex items-center justify-center min-h-[60vh] md:min-h-screen"
-            style={{ background: theme.surface }}
-          >
-            <span
-              className="text-[11px] uppercase tracking-[0.26em]"
-              style={{ color: theme.muted }}
-            >
-              Visuals coming soon
-            </span>
-          </div>
-        )}
+        <ComposedLeft
+          composition={project.composition ?? {}}
+          theme={theme}
+          projectTitle={project.title}
+        />
       </div>
 
       {/* RIGHT — sticky info ────────────────────────────── */}
@@ -300,124 +253,178 @@ function PageInner({
   );
 }
 
-/* ───────────────── Hypermind left column composition ───────────────── */
+/* ───────────────── Generic composed left column ───────────────── */
 
-const HM = {
-  hero: "/projects/hypermind/Visual 2 1.png",
-  grid: [
-    "/projects/hypermind/Group 22 1.png",
-    "/projects/hypermind/Group 24 1.png",
-    "/projects/hypermind/Group 25 1.png",
-    "/projects/hypermind/Group 31 1.png",
-  ],
-  wide: "/projects/hypermind/A4 - 2 1.png",
-  iconLight:
-    "/projects/hypermind/app icon -macOS-Default-1024x1024@1x 1.png",
-  iconDark: "/projects/hypermind/app icon -macOS-Dark-1024x1024@1x 1.png",
-  finale: "/projects/hypermind/Backpack UBIQ 1.png",
-};
+function ComposedLeft({
+  composition,
+  theme,
+  projectTitle,
+}: {
+  composition: ProjectComposition;
+  theme: Theme;
+  projectTitle: string;
+}) {
+  const grid = composition.grid ?? [];
+  const gridSlots = [0, 1, 2, 3].map((i) => grid[i]);
 
-function HypermindLeft({ theme }: { theme: Theme }) {
   return (
     <>
       {/* Hero */}
-      <div className="relative w-full" style={{ background: theme.surface }}>
-        <Image
-          src={asset(HM.hero)}
-          alt="Hypermind — Your private AI"
-          width={2855}
-          height={1595}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="w-full h-auto block"
-          unoptimized
-          priority
-        />
-      </div>
+      {composition.hero ? (
+        <div className="relative w-full" style={{ background: theme.surface }}>
+          <Image
+            src={asset(composition.hero)}
+            alt={`${projectTitle} hero`}
+            width={2400}
+            height={1500}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="w-full h-auto block"
+            unoptimized
+            priority
+          />
+        </div>
+      ) : (
+        <Placeholder theme={theme} aspect="3 / 2" label="Hero" />
+      )}
 
       {/* 2×2 grid */}
       <div
-        className="grid grid-cols-2 gap-px"
+        className="grid grid-cols-2 gap-px mt-px"
         style={{ background: theme.border }}
       >
-        {HM.grid.map((src, i) => (
-          <div
-            key={i}
-            className="relative w-full"
-            style={{ background: theme.surface }}
-          >
-            <Image
-              src={asset(src)}
-              alt={`Hypermind product ${i + 1}`}
-              width={1600}
-              height={1000}
-              sizes="(max-width: 768px) 50vw, 25vw"
-              className="w-full h-auto block"
-              unoptimized
-              loading="lazy"
+        {gridSlots.map((src, i) =>
+          src ? (
+            <div
+              key={i}
+              className="relative w-full"
+              style={{ background: theme.surface }}
+            >
+              <Image
+                src={asset(src)}
+                alt={`${projectTitle} ${i + 1}`}
+                width={1600}
+                height={1000}
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="w-full h-auto block"
+                unoptimized
+                loading="lazy"
+              />
+            </div>
+          ) : (
+            <Placeholder
+              key={i}
+              theme={theme}
+              aspect="4 / 3"
+              label={`Grid ${i + 1}`}
             />
-          </div>
-        ))}
+          )
+        )}
       </div>
 
-      {/* Wide — Local AI for your family */}
-      <div
-        className="relative w-full mt-px"
-        style={{ background: theme.surface }}
-      >
-        <Image
-          src={asset(HM.wide)}
-          alt="Local AI for your family, and no one else"
-          width={2855}
-          height={1595}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="w-full h-auto block"
-          unoptimized
-          loading="lazy"
-        />
-      </div>
+      {/* Wide */}
+      {composition.wide ? (
+        <div
+          className="relative w-full mt-px"
+          style={{ background: theme.surface }}
+        >
+          <Image
+            src={asset(composition.wide)}
+            alt={`${projectTitle} feature`}
+            width={2400}
+            height={1400}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="w-full h-auto block"
+            unoptimized
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <Placeholder theme={theme} aspect="3 / 2" label="Wide" />
+      )}
 
-      {/* App icons pair */}
+      {/* Icon pair */}
       <div
         className="flex items-center justify-center gap-4 sm:gap-6 px-6 py-16 sm:py-24 mt-px"
         style={{ background: theme.surface }}
       >
-        <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44">
-          <Image
-            src={asset(HM.iconLight)}
-            alt="UBIQ icon — light"
-            fill
-            sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
-            className="object-contain"
-            unoptimized
-            loading="lazy"
-          />
-        </div>
-        <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44">
-          <Image
-            src={asset(HM.iconDark)}
-            alt="UBIQ icon — dark"
-            fill
-            sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
-            className="object-contain"
-            unoptimized
-            loading="lazy"
-          />
-        </div>
+        {[0, 1].map((i) => {
+          const src = composition.iconPair?.[i];
+          return src ? (
+            <div
+              key={i}
+              className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44"
+            >
+              <Image
+                src={asset(src)}
+                alt={`${projectTitle} icon ${i + 1}`}
+                fill
+                sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
+                className="object-contain"
+                unoptimized
+                loading="lazy"
+              />
+            </div>
+          ) : (
+            <div
+              key={i}
+              className="flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-3xl"
+              style={{
+                border: `1px dashed ${theme.muted}`,
+                color: theme.muted,
+              }}
+            >
+              <span className="text-[10px] uppercase tracking-[0.24em]">
+                Icon {i + 1}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Finale — backpack */}
-      <div className="relative w-full mt-px" style={{ background: "#F5F1EC" }}>
-        <Image
-          src={asset(HM.finale)}
-          alt="UBIQ — Your personal intelligence, always with you"
-          width={2855}
-          height={2855}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="w-full h-auto block"
-          unoptimized
-          loading="lazy"
-        />
-      </div>
+      {/* Finale */}
+      {composition.finale ? (
+        <div
+          className="relative w-full mt-px"
+          style={{ background: composition.finaleBg ?? theme.surface }}
+        >
+          <Image
+            src={asset(composition.finale)}
+            alt={`${projectTitle} finale`}
+            width={2400}
+            height={2400}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="w-full h-auto block"
+            unoptimized
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <Placeholder theme={theme} aspect="1 / 1" label="Finale" />
+      )}
     </>
+  );
+}
+
+function Placeholder({
+  theme,
+  aspect,
+  label,
+}: {
+  theme: Theme;
+  aspect: string;
+  label: string;
+}) {
+  return (
+    <div
+      className="relative w-full mt-px flex items-center justify-center"
+      style={{
+        aspectRatio: aspect,
+        background: theme.surface,
+        border: `1px dashed ${theme.muted}`,
+        color: theme.muted,
+      }}
+    >
+      <span className="text-[11px] uppercase tracking-[0.24em]">{label}</span>
+    </div>
   );
 }
