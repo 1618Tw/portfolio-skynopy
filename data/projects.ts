@@ -3,12 +3,29 @@ export interface ProjectStat {
   label: string;
 }
 
+export type CompositionSlot =
+  | "hero"
+  | "grid"
+  | "wide"
+  | "iconPair"
+  | "finale"
+  | "videoStack";
+
+export interface VideoStack {
+  /** Path to a self-hosted video file (mp4). Leave empty to render placeholder. */
+  video?: string;
+  /** Up to 2 images stacked on the right of the video. */
+  images: [string?, string?];
+}
+
 /**
  * Composition driving the left column of a project page.
- * Slots without an image render a placeholder so the layout
+ * Slots without content render a placeholder so the layout
  * stays visible while assets are still being prepared.
  */
 export interface ProjectComposition {
+  /** Order of sections to render. Defaults to hero → grid → wide → iconPair → finale. */
+  slots?: CompositionSlot[];
   hero?: string;
   /** 2×2 grid — up to 4 images */
   grid?: string[];
@@ -20,6 +37,8 @@ export interface ProjectComposition {
   finale?: string;
   /** Optional background for the finale section (e.g. native canvas color of the asset) */
   finaleBg?: string;
+  /** Bottom split row: video on the left, two stacked photos on the right */
+  videoStack?: VideoStack;
 }
 
 export interface Project {
@@ -146,7 +165,21 @@ export const projects: Project[] = [
       { value: "×3", label: "Growth in ticket sales" },
     ],
     composition: {
-      hero: "/projects/jugaad/JUGAAD 2 TIGRE.png",
+      slots: ["grid", "wide", "videoStack"],
+      grid: [
+        "/projects/jugaad/jugaad behance 1-02.png",
+        "/projects/jugaad/DSC01650.JPG",
+        "/projects/jugaad/jugaad behance 1-03.png",
+        "/projects/jugaad/DSC01828.JPG",
+      ],
+      wide: "/projects/jugaad/DSC01875.JPG",
+      videoStack: {
+        video: "/projects/jugaad/jugaadportfo.mp4",
+        images: [
+          "/projects/jugaad/DSC01660.JPG",
+          "/projects/jugaad/DSC01853.JPG",
+        ],
+      },
     },
   },
   {

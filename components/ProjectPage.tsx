@@ -3,7 +3,11 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Project, ProjectComposition } from "@/data/projects";
+import {
+  Project,
+  ProjectComposition,
+  CompositionSlot,
+} from "@/data/projects";
 import { asset } from "@/lib/asset";
 
 interface Theme {
@@ -255,6 +259,14 @@ function PageInner({
 
 /* ───────────────── Generic composed left column ───────────────── */
 
+const DEFAULT_SLOTS: CompositionSlot[] = [
+  "hero",
+  "grid",
+  "wide",
+  "iconPair",
+  "finale",
+];
+
 function ComposedLeft({
   composition,
   theme,
@@ -264,13 +276,37 @@ function ComposedLeft({
   theme: Theme;
   projectTitle: string;
 }) {
-  const grid = composition.grid ?? [];
-  const gridSlots = [0, 1, 2, 3].map((i) => grid[i]);
+  const slots = composition.slots ?? DEFAULT_SLOTS;
 
   return (
     <>
-      {/* Hero */}
-      {composition.hero ? (
+      {slots.map((slot, i) => (
+        <SlotRenderer
+          key={`${slot}-${i}`}
+          slot={slot}
+          composition={composition}
+          theme={theme}
+          projectTitle={projectTitle}
+        />
+      ))}
+    </>
+  );
+}
+
+function SlotRenderer({
+  slot,
+  composition,
+  theme,
+  projectTitle,
+}: {
+  slot: CompositionSlot;
+  composition: ProjectComposition;
+  theme: Theme;
+  projectTitle: string;
+}) {
+  switch (slot) {
+    case "hero":
+      return composition.hero ? (
         <div className="relative w-full" style={{ background: theme.surface }}>
           <Image
             src={asset(composition.hero)}
@@ -285,44 +321,50 @@ function ComposedLeft({
         </div>
       ) : (
         <Placeholder theme={theme} aspect="3 / 2" label="Hero" />
-      )}
+      );
 
-      {/* 2×2 grid */}
-      <div
-        className="grid grid-cols-2 gap-px mt-px"
-        style={{ background: theme.border }}
-      >
-        {gridSlots.map((src, i) =>
-          src ? (
-            <div
-              key={i}
-              className="relative w-full"
-              style={{ background: theme.surface }}
-            >
-              <Image
-                src={asset(src)}
-                alt={`${projectTitle} ${i + 1}`}
-                width={1600}
-                height={1000}
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="w-full h-auto block"
-                unoptimized
-                loading="lazy"
+    case "grid": {
+      const grid = composition.grid ?? [];
+      const cells = [0, 1, 2, 3].map((i) => grid[i]);
+      return (
+        <div
+          className="grid grid-cols-2 gap-px mt-px"
+          style={{ background: theme.border }}
+        >
+          {cells.map((src, i) =>
+            src ? (
+              <div
+                key={i}
+                className="relative w-full"
+                style={{ background: theme.surface }}
+              >
+                <Image
+                  src={asset(src)}
+                  alt={`${projectTitle} ${i + 1}`}
+                  width={1600}
+                  height={1200}
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="w-full h-auto block"
+                  unoptimized
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <Placeholder
+                key={i}
+                theme={theme}
+                aspect="4 / 3"
+                label={`Grid ${i + 1}`}
+                noTopMargin
               />
-            </div>
-          ) : (
-            <Placeholder
-              key={i}
-              theme={theme}
-              aspect="4 / 3"
-              label={`Grid ${i + 1}`}
-            />
-          )
-        )}
-      </div>
+            )
+          )}
+        </div>
+      );
+    }
 
-      {/* Wide */}
-      {composition.wide ? (
+    case "wide":
+      return composition.wide ? (
         <div
           className="relative w-full mt-px"
           style={{ background: theme.surface }}
@@ -340,49 +382,51 @@ function ComposedLeft({
         </div>
       ) : (
         <Placeholder theme={theme} aspect="3 / 2" label="Wide" />
-      )}
+      );
 
-      {/* Icon pair */}
-      <div
-        className="flex items-center justify-center gap-4 sm:gap-6 px-6 py-16 sm:py-24 mt-px"
-        style={{ background: theme.surface }}
-      >
-        {[0, 1].map((i) => {
-          const src = composition.iconPair?.[i];
-          return src ? (
-            <div
-              key={i}
-              className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44"
-            >
-              <Image
-                src={asset(src)}
-                alt={`${projectTitle} icon ${i + 1}`}
-                fill
-                sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
-                className="object-contain"
-                unoptimized
-                loading="lazy"
-              />
-            </div>
-          ) : (
-            <div
-              key={i}
-              className="flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-3xl"
-              style={{
-                border: `1px dashed ${theme.muted}`,
-                color: theme.muted,
-              }}
-            >
-              <span className="text-[10px] uppercase tracking-[0.24em]">
-                Icon {i + 1}
-              </span>
-            </div>
-          );
-        })}
-      </div>
+    case "iconPair":
+      return (
+        <div
+          className="flex items-center justify-center gap-4 sm:gap-6 px-6 py-16 sm:py-24 mt-px"
+          style={{ background: theme.surface }}
+        >
+          {[0, 1].map((i) => {
+            const src = composition.iconPair?.[i];
+            return src ? (
+              <div
+                key={i}
+                className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44"
+              >
+                <Image
+                  src={asset(src)}
+                  alt={`${projectTitle} icon ${i + 1}`}
+                  fill
+                  sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
+                  className="object-contain"
+                  unoptimized
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div
+                key={i}
+                className="flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-3xl"
+                style={{
+                  border: `1px dashed ${theme.muted}`,
+                  color: theme.muted,
+                }}
+              >
+                <span className="text-[10px] uppercase tracking-[0.24em]">
+                  Icon {i + 1}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      );
 
-      {/* Finale */}
-      {composition.finale ? (
+    case "finale":
+      return composition.finale ? (
         <div
           className="relative w-full mt-px"
           style={{ background: composition.finaleBg ?? theme.surface }}
@@ -400,23 +444,105 @@ function ComposedLeft({
         </div>
       ) : (
         <Placeholder theme={theme} aspect="1 / 1" label="Finale" />
-      )}
-    </>
-  );
+      );
+
+    case "videoStack": {
+      const v = composition.videoStack;
+      return (
+        <div
+          className="grid grid-cols-2 gap-px mt-px"
+          style={{ background: theme.border }}
+        >
+          {/* Left: video */}
+          <div
+            className="relative aspect-square overflow-hidden"
+            style={{ background: theme.surface }}
+          >
+            {v?.video ? (
+              <video
+                src={asset(v.video)}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <div
+                className="absolute inset-0 flex items-center justify-center"
+                style={{
+                  border: `1px dashed ${theme.muted}`,
+                  color: theme.muted,
+                }}
+              >
+                <span className="text-[11px] uppercase tracking-[0.24em]">
+                  Video
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Right: 2 stacked photos */}
+          <div
+            className="grid grid-rows-2 gap-px"
+            style={{ background: theme.border }}
+          >
+            {[0, 1].map((j) => {
+              const src = v?.images?.[j];
+              return (
+                <div
+                  key={j}
+                  className="relative aspect-[2/1] overflow-hidden"
+                  style={{ background: theme.surface }}
+                >
+                  {src ? (
+                    <Image
+                      src={asset(src)}
+                      alt={`${projectTitle} ${j + 1}`}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="object-cover"
+                      unoptimized
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{
+                        border: `1px dashed ${theme.muted}`,
+                        color: theme.muted,
+                      }}
+                    >
+                      <span className="text-[11px] uppercase tracking-[0.24em]">
+                        Photo {j + 1}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+  }
 }
 
 function Placeholder({
   theme,
   aspect,
   label,
+  noTopMargin,
 }: {
   theme: Theme;
   aspect: string;
   label: string;
+  noTopMargin?: boolean;
 }) {
   return (
     <div
-      className="relative w-full mt-px flex items-center justify-center"
+      className={`relative w-full ${noTopMargin ? "" : "mt-px"} flex items-center justify-center`}
       style={{
         aspectRatio: aspect,
         background: theme.surface,
