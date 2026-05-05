@@ -366,7 +366,7 @@ function SlotRenderer({
     case "wide":
       return composition.wide ? (
         <div
-          className="relative w-full mt-px"
+          className="relative w-full mt-px p-3 sm:p-5"
           style={{ background: theme.surface }}
         >
           <Image
@@ -455,17 +455,13 @@ function SlotRenderer({
         >
           {/* Top-left */}
           <div
-            className="relative col-start-1 row-start-1 overflow-hidden"
+            className="relative col-start-1 row-start-1"
             style={{ background: theme.surface }}
           >
             {st?.left?.[0] ? (
-              <Image
-                src={asset(st.left[0])}
+              <PaddedFillImage
+                src={st.left[0]}
                 alt={`${projectTitle} 1`}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover"
-                unoptimized
                 priority
               />
             ) : (
@@ -475,17 +471,13 @@ function SlotRenderer({
 
           {/* Tall right (spans rows 1-2) */}
           <div
-            className="relative col-start-2 row-start-1 row-span-2 overflow-hidden"
+            className="relative col-start-2 row-start-1 row-span-2"
             style={{ background: theme.surface }}
           >
             {st?.right ? (
-              <Image
-                src={asset(st.right)}
+              <PaddedFillImage
+                src={st.right}
                 alt={`${projectTitle} feature`}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover"
-                unoptimized
                 priority
               />
             ) : (
@@ -495,18 +487,13 @@ function SlotRenderer({
 
           {/* Bottom-left */}
           <div
-            className="relative col-start-1 row-start-2 overflow-hidden"
+            className="relative col-start-1 row-start-2"
             style={{ background: theme.surface }}
           >
             {st?.left?.[1] ? (
-              <Image
-                src={asset(st.left[1])}
+              <PaddedFillImage
+                src={st.left[1]}
                 alt={`${projectTitle} 2`}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover"
-                unoptimized
-                loading="lazy"
               />
             ) : (
               <SlotPlaceholderInner theme={theme} label="Photo 2" />
@@ -526,19 +513,21 @@ function SlotRenderer({
         >
           {/* Left: video at its natural aspect */}
           <div
-            className="relative overflow-hidden"
+            className="relative"
             style={{ aspectRatio: videoAspect, background: theme.surface }}
           >
             {v?.video ? (
-              <video
-                src={asset(v.video)}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <div className="absolute inset-3 sm:inset-5">
+                <video
+                  src={asset(v.video)}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+              </div>
             ) : (
               <SlotPlaceholderInner theme={theme} label="Video" />
             )}
@@ -554,19 +543,11 @@ function SlotRenderer({
               return (
                 <div
                   key={j}
-                  className="relative overflow-hidden min-h-0"
+                  className="relative min-h-0"
                   style={{ background: theme.surface }}
                 >
                   {src ? (
-                    <Image
-                      src={asset(src)}
-                      alt={`${projectTitle} ${j + 1}`}
-                      fill
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover"
-                      unoptimized
-                      loading="lazy"
-                    />
+                    <PaddedFillImage src={src} alt={`${projectTitle} ${j + 1}`} />
                   ) : (
                     <SlotPlaceholderInner theme={theme} label={`Photo ${j + 1}`} />
                   )}
@@ -578,6 +559,31 @@ function SlotRenderer({
       );
     }
   }
+}
+
+function PaddedFillImage({
+  src,
+  alt,
+  priority,
+}: {
+  src: string;
+  alt: string;
+  priority?: boolean;
+}) {
+  return (
+    <div className="absolute inset-3 sm:inset-5">
+      <Image
+        src={asset(src)}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 50vw, 25vw"
+        className="object-contain"
+        unoptimized
+        priority={priority}
+        loading={priority ? undefined : "lazy"}
+      />
+    </div>
+  );
 }
 
 function SlotPlaceholderInner({

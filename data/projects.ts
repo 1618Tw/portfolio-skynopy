@@ -185,7 +185,7 @@ export const projects: Project[] = [
           "/projects/jugaad/jugaad behance 1-02.png",
           "/projects/jugaad/jugaad behance 1-03.png",
         ],
-        right: "/projects/jugaad/DSC01650.JPG",
+        right: "/projects/jugaad/PHOTO-2025-10-20-16-07-26.jpg",
       },
       wide: "/projects/jugaad/DSC01875.JPG",
       videoStack: {
