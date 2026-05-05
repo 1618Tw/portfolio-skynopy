@@ -37,3 +37,8 @@ next-env.d.ts
 
 # Vercel
 .vercel
+
+# Large source recordings (use compressed copy alongside)
+public/projects/**/ScreenRecording_*.MP4
+public/projects/**/ScreenRecording_*.mov
+public/projects/**/ScreenRecording_*.MOV

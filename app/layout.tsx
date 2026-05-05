@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Archivo_Black } from "next/font/google";
+import { Inter, Archivo_Black, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,6 +11,12 @@ const display = Archivo_Black({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-display",
+});
+
+const serif = Bodoni_Moda({
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "800"],
+  variable: "--font-serif",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +31,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${display.variable}`}>{children}</body>
+      <body
+        className={`${inter.variable} ${display.variable} ${serif.variable}`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

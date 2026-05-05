@@ -9,6 +9,8 @@ import {
   CompositionSlot,
 } from "@/data/projects";
 import { asset } from "@/lib/asset";
+import JugaadPage from "./projects/JugaadPage";
+import HomyPage from "./projects/HomyPage";
 
 interface Theme {
   bg: string;
@@ -102,11 +104,23 @@ export default function ProjectPage({ project, onClose }: Props) {
           transition={{ duration: 0.55, ease: EASE_DRAWER }}
           className="fixed inset-0 z-50 overflow-y-auto"
           style={{
-            background: (THEMES[project.slug] ?? DEFAULT_THEME).bg,
-            color: (THEMES[project.slug] ?? DEFAULT_THEME).text,
+            background:
+              project.slug === "jugaad" || project.slug === "homy"
+                ? "#FFFFFF"
+                : (THEMES[project.slug] ?? DEFAULT_THEME).bg,
+            color:
+              project.slug === "jugaad" || project.slug === "homy"
+                ? "#0A0A0A"
+                : (THEMES[project.slug] ?? DEFAULT_THEME).text,
           }}
         >
-          <PageInner project={project} onClose={onClose} />
+          {project.slug === "jugaad" ? (
+            <JugaadPage project={project} onClose={onClose} />
+          ) : project.slug === "homy" ? (
+            <HomyPage project={project} onClose={onClose} />
+          ) : (
+            <PageInner project={project} onClose={onClose} />
+          )}
         </motion.div>
       )}
     </AnimatePresence>
