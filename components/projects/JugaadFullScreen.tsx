@@ -129,8 +129,8 @@ export default function JugaadFullScreen({ project: _p, onClose }: Props) {
         ))}
       </div>
 
-      {/* BOTTOM — two-line description */}
-      <div className="absolute bottom-8 sm:bottom-12 left-0 right-0 z-20 px-6 text-center mix-blend-exclusion">
+      {/* BOTTOM — two-line description, horizontally centered */}
+      <div className="absolute bottom-8 sm:bottom-12 left-0 right-0 z-20 flex flex-col items-center px-6 text-center mix-blend-exclusion">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,7 +139,7 @@ export default function JugaadFullScreen({ project: _p, onClose }: Props) {
             ease: EASE_OUT,
             delay: 1.4,
           }}
-          className="text-[11px] sm:text-[12px] uppercase tracking-[0.24em] text-white max-w-3xl mx-auto leading-[1.6]"
+          className="text-[11px] sm:text-[12px] uppercase tracking-[0.24em] text-white max-w-2xl leading-[1.6]"
         >
           {BOTTOM_LINES[0]}
         </motion.p>
@@ -151,7 +151,7 @@ export default function JugaadFullScreen({ project: _p, onClose }: Props) {
             ease: EASE_OUT,
             delay: 1.55,
           }}
-          className="mt-2 text-[11px] sm:text-[12px] uppercase tracking-[0.24em] text-white/65 max-w-3xl mx-auto leading-[1.6]"
+          className="mt-2 text-[11px] sm:text-[12px] uppercase tracking-[0.24em] text-white/65 max-w-2xl leading-[1.6]"
         >
           {BOTTOM_LINES[1]}
         </motion.p>
