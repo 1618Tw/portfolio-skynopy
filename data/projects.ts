@@ -3,13 +3,18 @@ export interface ProjectStat {
   label: string;
 }
 
-export type GalleryItemType = "image" | "video" | "split" | "tallSplit";
+export type GalleryItemType =
+  | "image"
+  | "video"
+  | "split"
+  | "tallSplit"
+  | "quartet";
 
 export interface GalleryItem {
   type: GalleryItemType;
   /** For "image" or "video" */
   src?: string;
-  /** For "split" — exactly 2 paths shown side-by-side */
+  /** For "split" — 2 paths shown side-by-side. For "quartet" — 4 paths shown in a 4-up row. */
   srcs?: string[];
   /** For "tallSplit" — the tall element on the left (image or video) */
   tall?: string;
@@ -159,6 +164,7 @@ export const projects: Project[] = [
     composition: {
       hero: "/projects/homy/Mockup homy.jpg",
     },
+    hero: { type: "image", src: "/projects/homy/homy_screen.png" },
     dek: "A startup we built end-to-end with three friends.",
     accent: "#FF6BB5",
     titleFont: "sans",
@@ -289,7 +295,7 @@ export const projects: Project[] = [
   },
   {
     slug: "hypermind",
-    title: "Hypermind",
+    title: "UBIQ",
     tagline: "Building local AI",
     summary:
       "Founder Associate at a local-AI startup. Mesh-network apps, IP research, and a deep dive on gen-AI tooling.",
@@ -324,25 +330,27 @@ export const projects: Project[] = [
       finale: "/projects/hypermind/Backpack UBIQ 1.png",
       finaleBg: "#F5F1EC",
     },
-    hero: { type: "image", src: "/projects/hypermind/Visual 2 1.png" },
-    dek: "Building local AI.",
+    hero: { type: "image", src: "/projects/hypermind/UBIQmkp.png" },
+    dek: "Local AI, private by default.",
     accent: "#5DD3FF",
     titleFont: "sans",
     gallery: [
       {
-        type: "split",
+        type: "quartet",
         srcs: [
           "/projects/hypermind/Group 22 1.png",
           "/projects/hypermind/Group 24 1.png",
-        ],
-      },
-      {
-        type: "split",
-        srcs: [
           "/projects/hypermind/Group 25 1.png",
           "/projects/hypermind/Group 31 1.png",
         ],
+        aspect: "16/9",
       },
+      {
+        type: "video",
+        src: "/projects/hypermind/ubiq_video.mp4",
+        aspect: "16/9",
+      },
+      { type: "image", src: "/projects/hypermind/Visual 2 1.png" },
       { type: "image", src: "/projects/hypermind/A4 - 2 1.png" },
       {
         type: "split",

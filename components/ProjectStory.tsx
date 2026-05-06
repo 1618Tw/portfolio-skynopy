@@ -289,6 +289,34 @@ function GalleryRow({
     transition: { duration: 0.85, ease: EASE_OUT },
   } as const;
 
+  if (item.type === "quartet" && item.srcs && item.srcs.length === 4) {
+    return (
+      <motion.div
+        {...motionProps}
+        className="grid grid-cols-2 lg:grid-cols-4 gap-px"
+        style={{ background: "rgba(255,255,255,0.06)" }}
+      >
+        {item.srcs.map((src, j) => (
+          <div
+            key={j}
+            className="relative bg-black"
+            style={{ aspectRatio: item.aspect ?? "16/9" }}
+          >
+            <Image
+              src={asset(src)}
+              alt={`${title} ${index + 1}-${j + 1}`}
+              fill
+              sizes="(max-width: 1024px) 50vw, 25vw"
+              className="object-contain"
+              unoptimized
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </motion.div>
+    );
+  }
+
   if (item.type === "tallSplit" && item.tall && item.stack) {
     return (
       <motion.div
