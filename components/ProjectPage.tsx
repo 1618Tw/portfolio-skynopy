@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Project } from "@/data/projects";
 import ProjectStory from "./ProjectStory";
+import JugaadFullScreen from "./projects/JugaadFullScreen";
 
 const EASE_DRAWER = [0.32, 0.72, 0, 1] as const;
 
@@ -44,9 +45,15 @@ export default function ProjectPage({ project, onClose }: Props) {
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ duration: 0.55, ease: EASE_DRAWER }}
-          className="fixed inset-0 z-50 overflow-y-auto bg-black"
+          className={`fixed inset-0 z-50 bg-black ${
+            project.slug === "jugaad" ? "overflow-hidden" : "overflow-y-auto"
+          }`}
         >
-          <ProjectStory project={project} onClose={onClose} />
+          {project.slug === "jugaad" ? (
+            <JugaadFullScreen project={project} onClose={onClose} />
+          ) : (
+            <ProjectStory project={project} onClose={onClose} />
+          )}
         </motion.div>
       )}
     </AnimatePresence>
