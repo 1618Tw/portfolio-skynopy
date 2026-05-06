@@ -113,7 +113,10 @@ export interface Project {
   /* ───────── Cinematic-scroll fields ───────── */
 
   /** Full-bleed hero shown when the project page opens. */
-  hero?: { type: "video" | "image"; src: string };
+  hero?:
+    | { type: "video"; src: string }
+    | { type: "image"; src: string }
+    | { type: "gallery"; images: string[] };
   /** Italic dek shown after the title in the info section. */
   dek?: string;
   /** Project accent color used for the dek, stats numbers and active links. */
@@ -258,7 +261,21 @@ export const projects: Project[] = [
         ],
       },
     },
-    hero: { type: "video", src: "/projects/jugaad/jugaadportfo.mp4" },
+    hero: {
+      type: "gallery",
+      images: [
+        "/projects/jugaad/jugaad behance 1-02.png",
+        "/projects/jugaad/jugaad behance 1-03.png",
+        "/projects/jugaad/DSC01650.JPG",
+        "/projects/jugaad/DSC01660.JPG",
+        "/projects/jugaad/DSC01828.JPG",
+        "/projects/jugaad/DSC01853.JPG",
+        "/projects/jugaad/DSC01875.JPG",
+        "/projects/jugaad/DSC01877.JPG",
+        "/projects/jugaad/PHOTO-2025-10-20-16-07-26.jpg",
+        "/projects/jugaad/JUGAAD 2 TIGRE.png",
+      ],
+    },
     dek: "An independent music event series.",
     accent: "#FFFFFF",
     titleFont: "sans",

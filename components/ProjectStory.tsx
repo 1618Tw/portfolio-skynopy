@@ -2,9 +2,16 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Project, GalleryItem } from "@/data/projects";
 import { asset } from "@/lib/asset";
+
+// Lazy-load the WebGL gallery so three.js only ships when needed
+const InfiniteGallery = dynamic(
+  () => import("./ui/3d-gallery-photography"),
+  { ssr: false }
+);
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
@@ -102,16 +109,31 @@ function Hero({ project }: { project: Project }) {
             unoptimized
             priority
           />
+        ) : project.hero?.type === "gallery" ? (
+          <InfiniteGallery
+            images={project.hero.images.map((src) => asset(src))}
+            speed={1.2}
+            visibleCount={12}
+            className="absolute inset-0 h-full w-full"
+          />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
         )}
       </motion.div>
 
-      {/* Bottom gradient overlay so the title remains legible */}
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-black/80 pointer-events-none" />
+      {/* Bottom gradient overlay so the title remains legible (skipped for gallery hero where mix-blend handles contrast) */}
+      {project.hero?.type !== "gallery" && (
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-black/80 pointer-events-none" />
+      )}
 
       {/* Title overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end px-6 sm:px-10 lg:px-16 pb-16 sm:pb-20 lg:pb-28">
+      <div
+        className={`absolute inset-0 flex flex-col justify-end px-6 sm:px-10 lg:px-16 pb-16 sm:pb-20 lg:pb-28 pointer-events-none ${
+          project.hero?.type === "gallery"
+            ? "mix-blend-exclusion text-white"
+            : ""
+        }`}
+      >
         <motion.div
           initial={{ y: 24, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
