@@ -11,8 +11,10 @@ export interface GalleryItem {
   src?: string;
   /** For "split" — exactly 2 paths shown side-by-side */
   srcs?: string[];
-  /** For "tallSplit" — one tall image on the left */
+  /** For "tallSplit" — the tall element on the left (image or video) */
   tall?: string;
+  /** Whether the "tall" element is a video — defaults to image */
+  tallType?: "image" | "video";
   /** For "tallSplit" — two horizontal images stacked on the right */
   stack?: [string, string];
   /** Aspect ratio override (CSS string like "16/9"). Default: image natural, video 16/9. */
@@ -261,6 +263,15 @@ export const projects: Project[] = [
           "/projects/jugaad/jugaad behance 1-03.png",
         ],
       },
+      {
+        type: "tallSplit",
+        tall: "/projects/jugaad/jugaadportfo.mp4",
+        tallType: "video",
+        stack: [
+          "/projects/jugaad/DSC01660.JPG",
+          "/projects/jugaad/DSC01853.JPG",
+        ],
+      },
       { type: "image", src: "/projects/jugaad/DSC01875.JPG" },
       {
         type: "split",
@@ -269,9 +280,11 @@ export const projects: Project[] = [
           "/projects/jugaad/DSC01828.JPG",
         ],
       },
-      { type: "image", src: "/projects/jugaad/DSC01660.JPG" },
-      { type: "image", src: "/projects/jugaad/DSC01853.JPG" },
-      { type: "image", src: "/projects/jugaad/PHOTO-2025-10-20-16-07-26.jpg", aspect: "1066/1600" },
+      {
+        type: "image",
+        src: "/projects/jugaad/PHOTO-2025-10-20-16-07-26.jpg",
+        aspect: "1066/1600",
+      },
     ],
   },
   {

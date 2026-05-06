@@ -296,17 +296,30 @@ function GalleryRow({
         className="grid grid-cols-2 gap-px aspect-[4/3]"
         style={{ background: "rgba(255,255,255,0.06)" }}
       >
-        {/* Tall left */}
+        {/* Tall left — image or video */}
         <div className="relative bg-black overflow-hidden">
-          <Image
-            src={asset(item.tall)}
-            alt={`${title} ${index + 1}`}
-            fill
-            sizes="(max-width: 640px) 50vw, 50vw"
-            className="object-cover"
-            unoptimized
-            loading="lazy"
-          />
+          {item.tallType === "video" ? (
+            <video
+              src={asset(item.tall)}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+              aria-label={`${title} reel`}
+            />
+          ) : (
+            <Image
+              src={asset(item.tall)}
+              alt={`${title} ${index + 1}`}
+              fill
+              sizes="(max-width: 640px) 50vw, 50vw"
+              className="object-cover"
+              unoptimized
+              loading="lazy"
+            />
+          )}
         </div>
         {/* 2 horizontals stacked right */}
         <div
