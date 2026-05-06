@@ -289,6 +289,48 @@ function GalleryRow({
     transition: { duration: 0.85, ease: EASE_OUT },
   } as const;
 
+  if (item.type === "tallSplit" && item.tall && item.stack) {
+    return (
+      <motion.div
+        {...motionProps}
+        className="grid grid-cols-2 gap-px aspect-[4/3]"
+        style={{ background: "rgba(255,255,255,0.06)" }}
+      >
+        {/* Tall left */}
+        <div className="relative bg-black overflow-hidden">
+          <Image
+            src={asset(item.tall)}
+            alt={`${title} ${index + 1}`}
+            fill
+            sizes="(max-width: 640px) 50vw, 50vw"
+            className="object-cover"
+            unoptimized
+            loading="lazy"
+          />
+        </div>
+        {/* 2 horizontals stacked right */}
+        <div
+          className="grid grid-rows-2 gap-px"
+          style={{ background: "rgba(255,255,255,0.06)" }}
+        >
+          {item.stack.map((src, j) => (
+            <div key={j} className="relative bg-black overflow-hidden min-h-0">
+              <Image
+                src={asset(src)}
+                alt={`${title} ${index + 1}-${j + 1}`}
+                fill
+                sizes="(max-width: 640px) 50vw, 50vw"
+                className="object-cover"
+                unoptimized
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    );
+  }
+
   if (item.type === "split" && item.srcs && item.srcs.length === 2) {
     return (
       <motion.div

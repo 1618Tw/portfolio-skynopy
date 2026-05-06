@@ -3,7 +3,7 @@ export interface ProjectStat {
   label: string;
 }
 
-export type GalleryItemType = "image" | "video" | "split";
+export type GalleryItemType = "image" | "video" | "split" | "tallSplit";
 
 export interface GalleryItem {
   type: GalleryItemType;
@@ -11,6 +11,10 @@ export interface GalleryItem {
   src?: string;
   /** For "split" — exactly 2 paths shown side-by-side */
   srcs?: string[];
+  /** For "tallSplit" — one tall image on the left */
+  tall?: string;
+  /** For "tallSplit" — two horizontal images stacked on the right */
+  stack?: [string, string];
   /** Aspect ratio override (CSS string like "16/9"). Default: image natural, video 16/9. */
   aspect?: string;
   /** Optional one-liner caption shown under the item */
@@ -153,13 +157,19 @@ export const projects: Project[] = [
     composition: {
       hero: "/projects/homy/Mockup homy.jpg",
     },
-    hero: { type: "video", src: "/projects/homy/homy_recording.mp4" },
     dek: "A startup we built end-to-end with three friends.",
     accent: "#FF6BB5",
     titleFont: "sans",
     gallery: [
       { type: "image", src: "/projects/homy/Mockup homy.jpg" },
-      { type: "image", src: "/projects/homy/IMG_4339.PNG", aspect: "1170/2532" },
+      {
+        type: "tallSplit",
+        tall: "/projects/homy/IMG_4339.PNG",
+        stack: [
+          "/projects/homy/slides/1.0 homy pitch_Page_1.jpg",
+          "/projects/homy/slides/1.0 homy pitch_Page_2.jpg",
+        ],
+      },
       {
         type: "split",
         srcs: [
