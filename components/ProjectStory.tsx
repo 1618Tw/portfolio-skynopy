@@ -203,7 +203,7 @@ function Info({ project }: { project: Project }) {
                   ease: EASE_OUT,
                   delay: i * 0.08,
                 }}
-                className="grid grid-cols-[auto_1fr] gap-8 sm:gap-16 px-6 sm:px-12 lg:px-20 py-10 sm:py-14 border-t border-white/10 first:border-t-0"
+                className="grid grid-cols-[auto_1fr] gap-8 sm:gap-20 px-6 sm:px-12 lg:px-20 py-16 sm:py-24 border-t border-white/10 first:border-t-0"
               >
                 <span className="text-[11px] uppercase tracking-[0.28em] tnum text-white/55 pt-3 sm:pt-4">
                   {String(i + 1).padStart(2, "0")}
@@ -223,7 +223,7 @@ function Info({ project }: { project: Project }) {
       {/* CH 04 — By the Numbers */}
       {project.stats && project.stats.length > 0 && (
         <Chapter number="04" name="By the Numbers">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-20 sm:gap-y-32 gap-x-12 sm:gap-x-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-32 sm:gap-y-48 gap-x-16 sm:gap-x-24">
             {project.stats.map((s, i) => (
               <motion.div
                 key={i}
@@ -243,7 +243,7 @@ function Info({ project }: { project: Project }) {
                   {s.value}
                 </div>
                 <div
-                  className="font-helvetica mt-6 sm:mt-8 leading-[1.4] text-white whitespace-pre-line max-w-[28ch]"
+                  className="font-helvetica mt-10 sm:mt-14 leading-[1.4] text-white whitespace-pre-line max-w-[28ch]"
                   style={{ fontSize: "clamp(1rem, 1.4vw, 1.25rem)" }}
                 >
                   {s.label}
@@ -267,14 +267,14 @@ function Chapter({
   children: React.ReactNode;
 }) {
   return (
-    <section className="relative px-6 sm:px-12 lg:px-20 py-32 sm:py-56 border-t border-white/10">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative flex min-h-[80svh] flex-col px-6 sm:px-12 lg:px-20 py-32 sm:py-48 border-t border-white/10">
+      <div className="max-w-6xl mx-auto w-full flex flex-col flex-1">
         <motion.div
           initial={{ y: 16, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, margin: "-120px" }}
           transition={{ duration: 0.55, ease: EASE_OUT }}
-          className="flex items-center gap-5 sm:gap-6 mb-20 sm:mb-32 text-[11px] uppercase tracking-[0.28em] text-white/55"
+          className="flex items-center gap-5 sm:gap-6 text-[11px] uppercase tracking-[0.28em] text-white/55"
         >
           <span className="tnum">Ch {number}</span>
           <span
@@ -283,7 +283,7 @@ function Chapter({
           />
           <span>{name}</span>
         </motion.div>
-        {children}
+        <div className="mt-32 sm:mt-48 lg:mt-56 flex-1">{children}</div>
       </div>
     </section>
   );
@@ -298,8 +298,8 @@ function Gallery({ items, title }: { items: GalleryItem[]; title: string }) {
   return (
     <section className="border-t border-white/10">
       {/* Chapter header */}
-      <div className="px-6 sm:px-12 lg:px-20 pt-32 sm:pt-56 pb-16 sm:pb-24">
-        <div className="max-w-6xl mx-auto">
+      <div className="flex min-h-[55svh] flex-col px-6 sm:px-12 lg:px-20 py-32 sm:py-48">
+        <div className="max-w-6xl mx-auto w-full">
           <motion.div
             initial={{ y: 16, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -314,6 +314,16 @@ function Gallery({ items, title }: { items: GalleryItem[]; title: string }) {
             />
             <span>Visuals</span>
           </motion.div>
+          <motion.p
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.1 }}
+            className="mt-32 sm:mt-44 font-helvetica font-medium leading-[1.05] tracking-[-0.02em] text-white max-w-[18ch]"
+            style={{ fontSize: "clamp(2.5rem, 6vw, 6rem)" }}
+          >
+            The work.
+          </motion.p>
         </div>
       </div>
 
