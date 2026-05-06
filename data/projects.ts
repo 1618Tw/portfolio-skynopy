@@ -3,6 +3,22 @@ export interface ProjectStat {
   label: string;
 }
 
+export type GalleryItemType = "image" | "video" | "split";
+
+export interface GalleryItem {
+  type: GalleryItemType;
+  /** For "image" or "video" */
+  src?: string;
+  /** For "split" — exactly 2 paths shown side-by-side */
+  srcs?: string[];
+  /** Aspect ratio override (CSS string like "16/9"). Default: image natural, video 16/9. */
+  aspect?: string;
+  /** Optional one-liner caption shown under the item */
+  caption?: string;
+  /** Optional background color (e.g., for finale photos with native canvas color) */
+  bg?: string;
+}
+
 export type CompositionSlot =
   | "hero"
   | "grid"
@@ -82,6 +98,19 @@ export interface Project {
   modalCardBg?: string;
   /** Composition for the project page left column */
   composition?: ProjectComposition;
+
+  /* ───────── Cinematic-scroll fields ───────── */
+
+  /** Full-bleed hero shown when the project page opens. */
+  hero?: { type: "video" | "image"; src: string };
+  /** Italic dek shown after the title in the info section. */
+  dek?: string;
+  /** Project accent color used for the dek, stats numbers and active links. */
+  accent?: string;
+  /** Title font family for the hero — "sans" (Helvetica Black) or "serif" (Bodoni Moda). */
+  titleFont?: "sans" | "serif";
+  /** Gallery shown after the info section, each item revealed on scroll. */
+  gallery?: GalleryItem[];
 }
 
 export const projects: Project[] = [
@@ -123,13 +152,23 @@ export const projects: Project[] = [
     ],
     composition: {
       hero: "/projects/homy/Mockup homy.jpg",
-      grid: [
-        "/projects/homy/slides/1.0 homy pitch_Page_1.jpg",
-        "/projects/homy/slides/1.0 homy pitch_Page_2.jpg",
-        "/projects/homy/slides/1.0 homy pitch_Page_3.jpg",
-        "/projects/homy/slides/1.0 homy pitch_Page_4.jpg",
-      ],
     },
+    hero: { type: "video", src: "/projects/homy/homy_recording.mp4" },
+    dek: "A startup we built end-to-end with three friends.",
+    accent: "#FF6BB5",
+    titleFont: "sans",
+    gallery: [
+      { type: "image", src: "/projects/homy/Mockup homy.jpg" },
+      { type: "image", src: "/projects/homy/IMG_4339.PNG", aspect: "1170/2532" },
+      {
+        type: "split",
+        srcs: [
+          "/projects/homy/Group 32.png",
+          "/projects/homy/Group 33.png",
+        ],
+      },
+      { type: "image", src: "/projects/homy/felpa homy 1.png" },
+    ],
   },
   {
     slug: "clubhouse",
@@ -151,6 +190,9 @@ export const projects: Project[] = [
     thumbnail: "",
     modalCardBg: "#FAF3E5",
     composition: {},
+    dek: "Never go alone in a city.",
+    accent: "#D2533D",
+    titleFont: "sans",
   },
   {
     slug: "jugaad",
@@ -197,6 +239,30 @@ export const projects: Project[] = [
         ],
       },
     },
+    hero: { type: "video", src: "/projects/jugaad/jugaadportfo.mp4" },
+    dek: "An independent music event series.",
+    accent: "#E0FF1A",
+    titleFont: "serif",
+    gallery: [
+      {
+        type: "split",
+        srcs: [
+          "/projects/jugaad/jugaad behance 1-02.png",
+          "/projects/jugaad/jugaad behance 1-03.png",
+        ],
+      },
+      { type: "image", src: "/projects/jugaad/DSC01875.JPG" },
+      {
+        type: "split",
+        srcs: [
+          "/projects/jugaad/DSC01650.JPG",
+          "/projects/jugaad/DSC01828.JPG",
+        ],
+      },
+      { type: "image", src: "/projects/jugaad/DSC01660.JPG" },
+      { type: "image", src: "/projects/jugaad/DSC01853.JPG" },
+      { type: "image", src: "/projects/jugaad/PHOTO-2025-10-20-16-07-26.jpg", aspect: "1066/1600" },
+    ],
   },
   {
     slug: "hypermind",
@@ -235,6 +301,39 @@ export const projects: Project[] = [
       finale: "/projects/hypermind/Backpack UBIQ 1.png",
       finaleBg: "#F5F1EC",
     },
+    hero: { type: "image", src: "/projects/hypermind/Visual 2 1.png" },
+    dek: "Building local AI.",
+    accent: "#5DD3FF",
+    titleFont: "sans",
+    gallery: [
+      {
+        type: "split",
+        srcs: [
+          "/projects/hypermind/Group 22 1.png",
+          "/projects/hypermind/Group 24 1.png",
+        ],
+      },
+      {
+        type: "split",
+        srcs: [
+          "/projects/hypermind/Group 25 1.png",
+          "/projects/hypermind/Group 31 1.png",
+        ],
+      },
+      { type: "image", src: "/projects/hypermind/A4 - 2 1.png" },
+      {
+        type: "split",
+        srcs: [
+          "/projects/hypermind/app icon -macOS-Default-1024x1024@1x 1.png",
+          "/projects/hypermind/app icon -macOS-Dark-1024x1024@1x 1.png",
+        ],
+      },
+      {
+        type: "image",
+        src: "/projects/hypermind/Backpack UBIQ 1.png",
+        bg: "#F5F1EC",
+      },
+    ],
   },
   {
     slug: "vaseline",

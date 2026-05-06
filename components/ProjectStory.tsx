@@ -1,0 +1,386 @@
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Project, GalleryItem, ProjectStat } from "@/data/projects";
+import { asset } from "@/lib/asset";
+
+const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+
+interface Props {
+  project: Project;
+  onClose: () => void;
+}
+
+export default function ProjectStory({ project, onClose }: Props) {
+  const accent = project.accent ?? "#FFFFFF";
+
+  return (
+    <div className="bg-black text-white min-h-screen">
+      <Header onClose={onClose} accent={accent} />
+      <Hero project={project} />
+      <Info project={project} accent={accent} />
+      {project.stats && project.stats.length > 0 && (
+        <Stats stats={project.stats} accent={accent} />
+      )}
+      {project.gallery && project.gallery.length > 0 && (
+        <Gallery items={project.gallery} title={project.title} />
+      )}
+      <Closer onClose={onClose} accent={accent} />
+    </div>
+  );
+}
+
+/* ───────────────────────── header ───────────────────────── */
+
+function Header({ onClose, accent }: { onClose: () => void; accent: string }) {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-10 py-4 sm:py-5 pointer-events-none">
+      <motion.button
+        onClick={onClose}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.5, ease: EASE_OUT }}
+        className="press pointer-events-auto text-[11px] uppercase tracking-[0.22em] text-white/70 hover:text-white transition-colors"
+        style={{ color: undefined }}
+      >
+        ← Back
+      </motion.button>
+      <motion.button
+        onClick={onClose}
+        aria-label="Close"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.5, ease: EASE_OUT }}
+        className="press pointer-events-auto flex items-center justify-center w-9 h-9 rounded-full bg-white/8 backdrop-blur-md border border-white/10 hover:bg-white/15 transition-colors"
+      >
+        <span aria-hidden className="text-base leading-none" style={{ color: accent }}>
+          ×
+        </span>
+      </motion.button>
+    </header>
+  );
+}
+
+/* ───────────────────────── hero ───────────────────────── */
+
+function Hero({ project }: { project: Project }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  // Subtle parallax — media drifts up slightly and fades as user scrolls past.
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6, 1], [1, 0.55, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+
+  const titleClass =
+    project.titleFont === "serif"
+      ? "font-serif font-medium"
+      : "font-helvetica font-bold";
+
+  return (
+    <section
+      ref={ref}
+      className="relative h-[100svh] w-full overflow-hidden bg-black"
+    >
+      <motion.div style={{ y, opacity, scale }} className="absolute inset-0">
+        {project.hero?.type === "video" ? (
+          <video
+            src={asset(project.hero.src)}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover"
+          />
+        ) : project.hero?.type === "image" ? (
+          <Image
+            src={asset(project.hero.src)}
+            alt={project.title}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            unoptimized
+            priority
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
+        )}
+      </motion.div>
+
+      {/* Bottom gradient overlay so the title remains legible */}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-black/80 pointer-events-none" />
+
+      {/* Title overlay */}
+      <div className="absolute inset-0 flex flex-col justify-end px-6 sm:px-10 lg:px-16 pb-16 sm:pb-20 lg:pb-28">
+        <motion.div
+          initial={{ y: 24, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.45 }}
+          className="text-[10.5px] uppercase tracking-[0.26em] text-white/65 mb-6"
+        >
+          <span className="tnum">{project.year}</span>
+          <span aria-hidden className="mx-3 opacity-50">/</span>
+          <span>{project.category}</span>
+        </motion.div>
+
+        <motion.h1
+          initial={{ y: 60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: EASE_OUT, delay: 0.55 }}
+          className={`${titleClass} uppercase leading-[0.85] tracking-[-0.025em]`}
+          style={{ fontSize: "clamp(3.5rem, 13vw, 14rem)" }}
+        >
+          {project.title}
+        </motion.h1>
+      </div>
+
+      {/* Scroll indicator — bouncing dot */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.7, duration: 0.6 }}
+        className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 flex items-center gap-3 text-[10.5px] uppercase tracking-[0.3em] text-white/55"
+      >
+        <span>Scroll</span>
+        <motion.span
+          aria-hidden
+          animate={{ y: [0, 5, 0] }}
+          transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+        >
+          ↓
+        </motion.span>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ───────────────────────── info ───────────────────────── */
+
+function Info({ project, accent }: { project: Project; accent: string }) {
+  return (
+    <section className="px-6 sm:px-10 lg:px-20 py-32 sm:py-44">
+      <div className="max-w-5xl mx-auto">
+        {project.dek && (
+          <motion.p
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, ease: EASE_OUT }}
+            className="font-serif italic font-normal leading-[1.18] tracking-[-0.005em] mb-16 sm:mb-24"
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
+              color: accent,
+            }}
+          >
+            {project.dek}
+          </motion.p>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-10">
+          <motion.p
+            initial={{ y: 24, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.05 }}
+            className="md:col-span-7 text-base sm:text-[17px] leading-[1.7] text-white/85 max-w-[60ch]"
+          >
+            {project.description}
+          </motion.p>
+
+          {project.bullets.length > 0 && (
+            <ul className="md:col-span-5 flex flex-col gap-3.5">
+              {project.bullets.map((b, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ y: 18, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{
+                    duration: 0.55,
+                    ease: EASE_OUT,
+                    delay: 0.18 + i * 0.07,
+                  }}
+                  className="flex gap-3 text-sm sm:text-[15px] leading-[1.6] text-white/85"
+                >
+                  <span
+                    aria-hidden
+                    className="mt-[10px] w-1 h-1 rounded-full shrink-0"
+                    style={{ background: accent }}
+                  />
+                  <span>{b}</span>
+                </motion.li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────── stats ───────────────────────── */
+
+function Stats({ stats, accent }: { stats: ProjectStat[]; accent: string }) {
+  return (
+    <section className="px-6 sm:px-10 lg:px-20 py-24 sm:py-36 border-t border-white/10">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-12">
+        {stats.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ y: 40, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{
+              duration: 0.7,
+              ease: EASE_OUT,
+              delay: i * 0.08,
+            }}
+          >
+            <div
+              className="font-serif font-medium leading-[0.85] tracking-[-0.02em]"
+              style={{
+                fontSize: "clamp(2.75rem, 5.2vw, 4.5rem)",
+                color: accent,
+              }}
+            >
+              {s.value}
+            </div>
+            <div className="mt-4 text-[10.5px] uppercase tracking-[0.22em] text-white/55 leading-[1.55] max-w-[20ch]">
+              {s.label}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────── gallery ───────────────────────── */
+
+function Gallery({ items, title }: { items: GalleryItem[]; title: string }) {
+  return (
+    <section className="border-t border-white/10">
+      {items.map((item, i) => (
+        <GalleryRow key={i} item={item} index={i} title={title} />
+      ))}
+    </section>
+  );
+}
+
+function GalleryRow({
+  item,
+  index,
+  title,
+}: {
+  item: GalleryItem;
+  index: number;
+  title: string;
+}) {
+  const motionProps = {
+    initial: { y: 40, opacity: 0 },
+    whileInView: { y: 0, opacity: 1 },
+    viewport: { once: true, margin: "-120px" },
+    transition: { duration: 0.85, ease: EASE_OUT },
+  } as const;
+
+  if (item.type === "split" && item.srcs && item.srcs.length === 2) {
+    return (
+      <motion.div
+        {...motionProps}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-px"
+        style={{ background: "rgba(255,255,255,0.06)" }}
+      >
+        {item.srcs.map((src, j) => (
+          <div
+            key={j}
+            className="relative w-full bg-black"
+            style={{ aspectRatio: item.aspect ?? "4/3" }}
+          >
+            <Image
+              src={asset(src)}
+              alt={`${title} ${index + 1}-${j + 1}`}
+              fill
+              sizes="(max-width: 640px) 100vw, 50vw"
+              className="object-cover"
+              unoptimized
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </motion.div>
+    );
+  }
+
+  if (item.type === "video" && item.src) {
+    return (
+      <motion.div
+        {...motionProps}
+        className="relative w-full"
+        style={{
+          background: item.bg ?? "#000",
+          aspectRatio: item.aspect ?? "16/9",
+        }}
+      >
+        <video
+          src={asset(item.src)}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </motion.div>
+    );
+  }
+
+  // single image — natural aspect, full width
+  if (item.src) {
+    return (
+      <motion.div
+        {...motionProps}
+        className="relative w-full"
+        style={{ background: item.bg ?? "#000" }}
+      >
+        <Image
+          src={asset(item.src)}
+          alt={`${title} ${index + 1}`}
+          width={2400}
+          height={1600}
+          sizes="100vw"
+          className="w-full h-auto block"
+          unoptimized
+          loading="lazy"
+        />
+      </motion.div>
+    );
+  }
+
+  return null;
+}
+
+/* ───────────────────────── closer ───────────────────────── */
+
+function Closer({ onClose, accent }: { onClose: () => void; accent: string }) {
+  return (
+    <section className="px-6 sm:px-10 py-32 sm:py-44 border-t border-white/10 text-center">
+      <motion.button
+        onClick={onClose}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
+        className="press inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.28em] text-white/65 hover:text-white transition-colors"
+      >
+        <span aria-hidden style={{ color: accent }}>↑</span>
+        <span>Return to portfolio</span>
+      </motion.button>
+    </section>
+  );
+}
