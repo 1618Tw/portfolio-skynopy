@@ -19,10 +19,10 @@ const ICON_LIGHT = "/projects/homy/Group 33.png";
 const FINALE = "/projects/homy/felpa homy 1.png";
 
 const STATS = [
-  { value: "50+", lines: ["house parties"] },
-  { value: "800.000", lines: ["people reached"] },
-  { value: "1°", lines: ["ranked for", "one week in the app", "store"] },
-  { value: "40.000", lines: ["download"] },
+  { value: "50+", label: "House parties hosted" },
+  { value: "800,000", label: "People reached" },
+  { value: "1°", label: "Weekly App Store ranking" },
+  { value: "40,000", label: "Downloads" },
 ];
 
 const BODY = [
@@ -159,7 +159,7 @@ export default function HomyPage({
         className="md:sticky md:top-0 md:h-screen md:overflow-y-auto"
         style={{ background: "#FFFFFF", color: BLACK }}
       >
-        <div className="relative h-full pl-14 sm:pl-24 lg:pl-32 pr-8 sm:pr-12 lg:pr-16 pt-24 sm:pt-32 lg:pt-40 pb-12 sm:pb-16">
+        <div className="relative h-full pl-14 sm:pl-24 lg:pl-32 pr-8 sm:pr-12 lg:pr-16 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20">
           {/* Close */}
           <button
             onClick={onClose}
@@ -169,45 +169,83 @@ export default function HomyPage({
             <span aria-hidden className="text-base leading-none">×</span>
           </button>
 
+          {/* Top meta */}
+          <div
+            className="flex items-center gap-3 text-[10.5px] uppercase tracking-[0.22em] mb-10"
+            style={{ color: "rgba(10,10,10,0.55)" }}
+          >
+            <span className="tnum">2023</span>
+            <span aria-hidden className="opacity-40">/</span>
+            <span>Startup · Product</span>
+          </div>
+
           {/* Title — bold sans */}
           <h1
             id="project-title"
-            className="font-helvetica font-bold leading-[0.95] tracking-[-0.025em]"
+            className="font-helvetica font-bold leading-[0.92] tracking-[-0.03em]"
             style={{
               color: BLACK,
-              fontSize: "clamp(3.5rem, 5.5vw, 5rem)",
+              fontSize: "clamp(3.75rem, 6vw, 5.5rem)",
             }}
           >
             Homy
           </h1>
 
+          {/* Italic Bodoni subtitle */}
+          <p
+            className="font-serif italic font-normal mt-5 leading-[1.25]"
+            style={{
+              color: "rgba(10,10,10,0.65)",
+              fontSize: "clamp(1.25rem, 1.7vw, 1.625rem)",
+            }}
+          >
+            A startup we built end-to-end with three friends.
+          </p>
+
           {/* Body */}
-          <div className="mt-14 sm:mt-20 max-w-[36ch] flex flex-col gap-5 text-[14.5px] sm:text-[15px] leading-[1.55]">
+          <div className="mt-12 sm:mt-16 max-w-[36ch] flex flex-col gap-5 text-[14.5px] sm:text-[15px] leading-[1.65]">
             {BODY.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
           </div>
 
-          {/* Stats grid (Didone serif numbers in black) */}
-          <div className="mt-20 sm:mt-28 grid grid-cols-2 gap-y-14 gap-x-12 max-w-md">
+          {/* Hairline */}
+          <div
+            className="mt-16 sm:mt-20 max-w-md h-px"
+            style={{ background: BLACK, opacity: 0.14 }}
+          />
+
+          {/* Stats grid */}
+          <div className="mt-12 sm:mt-14 grid grid-cols-2 gap-y-12 gap-x-12 max-w-md">
             {STATS.map((s, i) => (
               <div key={i}>
                 <div
-                  className="font-serif font-medium leading-[0.95]"
+                  className="font-serif font-medium leading-[0.9]"
                   style={{
                     color: BLACK,
-                    fontSize: "clamp(2.25rem, 3.4vw, 3.25rem)",
+                    fontSize: "clamp(2.5rem, 4vw, 3.75rem)",
                   }}
                 >
                   {s.value}
                 </div>
-                <div className="mt-2 text-[12.5px] leading-[1.45]">
-                  {s.lines.map((line, j) => (
-                    <div key={j}>{line}</div>
-                  ))}
+                <div
+                  className="mt-3 text-[10.5px] uppercase tracking-[0.18em] leading-[1.55]"
+                  style={{ color: "rgba(10,10,10,0.7)" }}
+                >
+                  {s.label}
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Footer tag */}
+          <div className="mt-14 sm:mt-20 max-w-md">
+            <span
+              className="text-[10px] uppercase tracking-[0.24em]"
+              style={{ color: "rgba(10,10,10,0.45)" }}
+            >
+              #1 weekly · App Store
+            </span>
           </div>
         </div>
       </aside>
