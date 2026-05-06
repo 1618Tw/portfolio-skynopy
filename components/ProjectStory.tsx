@@ -159,122 +159,131 @@ function Hero({ project }: { project: Project }) {
 function Info({ project }: { project: Project }) {
   return (
     <>
-      {/* DEK — marquee statement, centered with generous padding */}
+      {/* CH 01 — Intro (Dek) */}
       {project.dek && (
-        <section className="relative px-6 sm:px-10 lg:px-20 py-36 sm:py-52">
+        <Chapter number="01" name="Intro">
           <motion.p
-            initial={{ y: 30, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true, margin: "-150px" }}
-            transition={{ duration: 0.9, ease: EASE_OUT }}
-            className="font-helvetica font-medium text-center leading-[1.08] tracking-[-0.02em] text-white max-w-5xl mx-auto"
-            style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.75rem)" }}
+            transition={{ duration: 1, ease: EASE_OUT }}
+            className="font-helvetica font-medium leading-[1.02] tracking-[-0.025em] text-white max-w-[18ch]"
+            style={{ fontSize: "clamp(2.75rem, 7vw, 7.5rem)" }}
           >
             {project.dek}
           </motion.p>
-        </section>
+        </Chapter>
       )}
 
-      {/* OVERVIEW */}
-      <SectionRow label="Overview">
-        <p className="text-lg sm:text-xl lg:text-[1.375rem] leading-[1.5] text-white max-w-[58ch]">
+      {/* CH 02 — Context (Description) */}
+      <Chapter number="02" name="Context">
+        <motion.p
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: EASE_OUT }}
+          className="text-xl sm:text-2xl lg:text-[1.75rem] leading-[1.45] tracking-[-0.005em] text-white max-w-[42ch]"
+        >
           {project.description}
-        </p>
-      </SectionRow>
+        </motion.p>
+      </Chapter>
 
-      {/* ROLES */}
+      {/* CH 03 — Roles */}
       {project.bullets.length > 0 && (
-        <SectionRow label="Roles">
-          <ul className="flex flex-col">
+        <Chapter number="03" name="Roles">
+          <div className="-mx-6 sm:-mx-12 lg:-mx-20">
             {project.bullets.map((b, i) => (
-              <motion.li
-                key={i}
-                initial={{ y: 18, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.55,
-                  ease: EASE_OUT,
-                  delay: i * 0.07,
-                }}
-                className="grid grid-cols-[auto_1fr] gap-6 sm:gap-12 py-6 sm:py-8 items-baseline border-t border-white/10 first:border-t-0"
-              >
-                <span className="text-[11px] uppercase tracking-[0.22em] tnum text-white/55">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="text-base sm:text-lg lg:text-xl leading-[1.5] text-white max-w-[55ch]">
-                  {b}
-                </span>
-              </motion.li>
-            ))}
-          </ul>
-        </SectionRow>
-      )}
-
-      {/* NUMBERS */}
-      {project.stats && project.stats.length > 0 && (
-        <SectionRow label="By the Numbers">
-          <div className="grid grid-cols-2 gap-y-16 sm:gap-y-24 gap-x-10 sm:gap-x-16">
-            {project.stats.map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ y: 30, opacity: 0 }}
+                initial={{ y: 24, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{
-                  duration: 0.7,
+                  duration: 0.65,
                   ease: EASE_OUT,
                   delay: i * 0.08,
                 }}
+                className="grid grid-cols-[auto_1fr] gap-8 sm:gap-16 px-6 sm:px-12 lg:px-20 py-10 sm:py-14 border-t border-white/10 first:border-t-0"
+              >
+                <span className="text-[11px] uppercase tracking-[0.28em] tnum text-white/55 pt-3 sm:pt-4">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className="font-helvetica leading-[1.15] tracking-[-0.015em] text-white max-w-[28ch]"
+                  style={{ fontSize: "clamp(1.5rem, 3.2vw, 2.75rem)" }}
+                >
+                  {b}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </Chapter>
+      )}
+
+      {/* CH 04 — By the Numbers */}
+      {project.stats && project.stats.length > 0 && (
+        <Chapter number="04" name="By the Numbers">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-20 sm:gap-y-32 gap-x-12 sm:gap-x-20">
+            {project.stats.map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ y: 40, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{
+                  duration: 0.8,
+                  ease: EASE_OUT,
+                  delay: i * 0.1,
+                }}
               >
                 <div
-                  className="font-serif font-medium leading-[0.9] tracking-[-0.015em] text-white"
-                  style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)" }}
+                  className="font-serif font-medium leading-[0.88] tracking-[-0.02em] text-white"
+                  style={{ fontSize: "clamp(4rem, 9vw, 8rem)" }}
                 >
                   {s.value}
                 </div>
-                <div className="font-helvetica mt-4 sm:mt-5 text-[14px] sm:text-[15px] leading-[1.45] text-white whitespace-pre-line max-w-[24ch]">
+                <div
+                  className="font-helvetica mt-6 sm:mt-8 leading-[1.4] text-white whitespace-pre-line max-w-[28ch]"
+                  style={{ fontSize: "clamp(1rem, 1.4vw, 1.25rem)" }}
+                >
                   {s.label}
                 </div>
               </motion.div>
             ))}
           </div>
-        </SectionRow>
+        </Chapter>
       )}
     </>
   );
 }
 
-function SectionRow({
-  label,
+function Chapter({
+  number,
+  name,
   children,
 }: {
-  label: string;
+  number: string;
+  name: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="px-6 sm:px-10 lg:px-20 py-24 sm:py-36 border-t border-white/10">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-10">
+    <section className="relative px-6 sm:px-12 lg:px-20 py-32 sm:py-56 border-t border-white/10">
+      <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
+          initial={{ y: 16, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: EASE_OUT }}
-          className="md:col-span-3"
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.55, ease: EASE_OUT }}
+          className="flex items-center gap-5 sm:gap-6 mb-20 sm:mb-32 text-[11px] uppercase tracking-[0.28em] text-white/55"
         >
-          <span className="text-[11px] uppercase tracking-[0.28em] text-white/55">
-            {label}
-          </span>
+          <span className="tnum">Ch {number}</span>
+          <span
+            aria-hidden
+            className="block w-10 sm:w-14 h-px bg-white/30"
+          />
+          <span>{name}</span>
         </motion.div>
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
-          className="md:col-span-9"
-        >
-          {children}
-        </motion.div>
+        {children}
       </div>
     </section>
   );
@@ -288,6 +297,26 @@ function SectionRow({
 function Gallery({ items, title }: { items: GalleryItem[]; title: string }) {
   return (
     <section className="border-t border-white/10">
+      {/* Chapter header */}
+      <div className="px-6 sm:px-12 lg:px-20 pt-32 sm:pt-56 pb-16 sm:pb-24">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ y: 16, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.55, ease: EASE_OUT }}
+            className="flex items-center gap-5 sm:gap-6 text-[11px] uppercase tracking-[0.28em] text-white/55"
+          >
+            <span className="tnum">Ch 05</span>
+            <span
+              aria-hidden
+              className="block w-10 sm:w-14 h-px bg-white/30"
+            />
+            <span>Visuals</span>
+          </motion.div>
+        </div>
+      </div>
+
       {items.map((item, i) => (
         <GalleryRow key={i} item={item} index={i} title={title} />
       ))}
