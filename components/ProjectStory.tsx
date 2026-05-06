@@ -14,27 +14,25 @@ interface Props {
 }
 
 export default function ProjectStory({ project, onClose }: Props) {
-  const accent = project.accent ?? "#FFFFFF";
-
   return (
     <div className="bg-black text-white min-h-screen">
-      <Header onClose={onClose} accent={accent} />
+      <Header onClose={onClose} />
       <Hero project={project} />
-      <Info project={project} accent={accent} />
+      <Info project={project} accent="#FFFFFF" />
       {project.stats && project.stats.length > 0 && (
-        <Stats stats={project.stats} accent={accent} />
+        <Stats stats={project.stats} />
       )}
       {project.gallery && project.gallery.length > 0 && (
         <Gallery items={project.gallery} title={project.title} />
       )}
-      <Closer onClose={onClose} accent={accent} />
+      <Closer onClose={onClose} />
     </div>
   );
 }
 
 /* ───────────────────────── header ───────────────────────── */
 
-function Header({ onClose, accent }: { onClose: () => void; accent: string }) {
+function Header({ onClose }: { onClose: () => void }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-10 py-4 sm:py-5 pointer-events-none">
       <motion.button
@@ -43,7 +41,6 @@ function Header({ onClose, accent }: { onClose: () => void; accent: string }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.5, ease: EASE_OUT }}
         className="press pointer-events-auto text-[11px] uppercase tracking-[0.22em] text-white/70 hover:text-white transition-colors"
-        style={{ color: undefined }}
       >
         ← Back
       </motion.button>
@@ -55,7 +52,7 @@ function Header({ onClose, accent }: { onClose: () => void; accent: string }) {
         transition={{ delay: 0.6, duration: 0.5, ease: EASE_OUT }}
         className="press pointer-events-auto flex items-center justify-center w-9 h-9 rounded-full bg-white/8 backdrop-blur-md border border-white/10 hover:bg-white/15 transition-colors"
       >
-        <span aria-hidden className="text-base leading-none" style={{ color: accent }}>
+        <span aria-hidden className="text-base leading-none text-white">
           ×
         </span>
       </motion.button>
@@ -162,7 +159,7 @@ function Hero({ project }: { project: Project }) {
 
 /* ───────────────────────── info ───────────────────────── */
 
-function Info({ project, accent }: { project: Project; accent: string }) {
+function Info({ project }: { project: Project; accent: string }) {
   return (
     <section className="px-6 sm:px-10 lg:px-20 py-32 sm:py-44">
       <div className="max-w-5xl mx-auto">
@@ -172,10 +169,9 @@ function Info({ project, accent }: { project: Project; accent: string }) {
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.8, ease: EASE_OUT }}
-            className="font-serif italic font-normal leading-[1.18] tracking-[-0.005em] mb-16 sm:mb-24"
+            className="font-helvetica font-medium leading-[1.18] tracking-[-0.01em] mb-16 sm:mb-24 text-white"
             style={{
               fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
-              color: accent,
             }}
           >
             {project.dek}
@@ -206,12 +202,11 @@ function Info({ project, accent }: { project: Project; accent: string }) {
                     ease: EASE_OUT,
                     delay: 0.18 + i * 0.07,
                   }}
-                  className="flex gap-3 text-sm sm:text-[15px] leading-[1.6] text-white/85"
+                  className="flex gap-3 text-sm sm:text-[15px] leading-[1.6] text-white/90"
                 >
                   <span
                     aria-hidden
-                    className="mt-[10px] w-1 h-1 rounded-full shrink-0"
-                    style={{ background: accent }}
+                    className="mt-[10px] w-1 h-1 rounded-full shrink-0 bg-white"
                   />
                   <span>{b}</span>
                 </motion.li>
@@ -226,10 +221,10 @@ function Info({ project, accent }: { project: Project; accent: string }) {
 
 /* ───────────────────────── stats ───────────────────────── */
 
-function Stats({ stats, accent }: { stats: ProjectStat[]; accent: string }) {
+function Stats({ stats }: { stats: ProjectStat[] }) {
   return (
     <section className="px-6 sm:px-10 lg:px-20 py-24 sm:py-36 border-t border-white/10">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-12">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 gap-y-16 sm:gap-y-24 gap-x-10 sm:gap-x-16">
         {stats.map((s, i) => (
           <motion.div
             key={i}
@@ -243,15 +238,12 @@ function Stats({ stats, accent }: { stats: ProjectStat[]; accent: string }) {
             }}
           >
             <div
-              className="font-serif font-medium leading-[0.85] tracking-[-0.02em]"
-              style={{
-                fontSize: "clamp(2.75rem, 5.2vw, 4.5rem)",
-                color: accent,
-              }}
+              className="font-serif font-medium leading-[0.9] tracking-[-0.015em] text-white"
+              style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)" }}
             >
               {s.value}
             </div>
-            <div className="mt-4 text-[10.5px] uppercase tracking-[0.22em] text-white/55 leading-[1.55] max-w-[20ch]">
+            <div className="font-helvetica mt-4 sm:mt-5 text-[14px] sm:text-[15px] leading-[1.4] text-white whitespace-pre-line">
               {s.label}
             </div>
           </motion.div>
@@ -450,7 +442,7 @@ function GalleryRow({
 
 /* ───────────────────────── closer ───────────────────────── */
 
-function Closer({ onClose, accent }: { onClose: () => void; accent: string }) {
+function Closer({ onClose }: { onClose: () => void }) {
   return (
     <section className="px-6 sm:px-10 py-32 sm:py-44 border-t border-white/10 text-center">
       <motion.button
@@ -459,9 +451,9 @@ function Closer({ onClose, accent }: { onClose: () => void; accent: string }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.6, ease: EASE_OUT }}
-        className="press inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.28em] text-white/65 hover:text-white transition-colors"
+        className="press inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.28em] text-white/70 hover:text-white transition-colors"
       >
-        <span aria-hidden style={{ color: accent }}>↑</span>
+        <span aria-hidden className="text-white">↑</span>
         <span>Return to portfolio</span>
       </motion.button>
     </section>

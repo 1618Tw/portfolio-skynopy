@@ -156,17 +156,17 @@ export const projects: Project[] = [
       "/projects/homy/slides/1.0 homy pitch_Page_8.jpg",
     ],
     stats: [
-      { value: "1M+", label: "People reached across social" },
-      { value: "40K", label: "Downloads in the first week" },
-      { value: "#1", label: "Weekly ranking on the App Store" },
-      { value: "30+", label: "Parties organized in the network" },
+      { value: "50+", label: "house parties" },
+      { value: "800.000", label: "people reached" },
+      { value: "1°", label: "ranked for\none week in the app\nstore" },
+      { value: "40.000", label: "download" },
     ],
     composition: {
       hero: "/projects/homy/Mockup homy.jpg",
     },
     hero: { type: "image", src: "/projects/homy/homy_screen.png" },
     dek: "A startup we built end-to-end with three friends.",
-    accent: "#FF6BB5",
+    accent: "#FFFFFF",
     titleFont: "sans",
     gallery: [
       { type: "image", src: "/projects/homy/Mockup homy.jpg" },
@@ -209,7 +209,7 @@ export const projects: Project[] = [
     modalCardBg: "#FAF3E5",
     composition: {},
     dek: "Never go alone in a city.",
-    accent: "#D2533D",
+    accent: "#FFFFFF",
     titleFont: "sans",
   },
   {
@@ -234,9 +234,10 @@ export const projects: Project[] = [
     dark: true,
     modalCardBg: "#0A0A0A",
     stats: [
-      { value: "350", label: "Tickets sold on opening night" },
-      { value: "4", label: "Years running, fully independent" },
-      { value: "×3", label: "Growth in ticket sales" },
+      { value: "350", label: "ticket sold\nthe first night." },
+      { value: "3000+", label: "people reached" },
+      { value: "85%", label: "of growth\nin three events" },
+      { value: "60.000€", label: "of total incomes" },
     ],
     composition: {
       slots: ["splitTop", "wide", "videoStack"],
@@ -259,8 +260,8 @@ export const projects: Project[] = [
     },
     hero: { type: "video", src: "/projects/jugaad/jugaadportfo.mp4" },
     dek: "An independent music event series.",
-    accent: "#E0FF1A",
-    titleFont: "serif",
+    accent: "#FFFFFF",
+    titleFont: "sans",
     gallery: [
       {
         type: "split",
@@ -332,7 +333,7 @@ export const projects: Project[] = [
     },
     hero: { type: "image", src: "/projects/hypermind/UBIQmkp.png" },
     dek: "Local AI, private by default.",
-    accent: "#5DD3FF",
+    accent: "#FFFFFF",
     titleFont: "sans",
     gallery: [
       {
