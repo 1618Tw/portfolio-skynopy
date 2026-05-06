@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Project, GalleryItem, ProjectStat } from "@/data/projects";
+import { Project, GalleryItem } from "@/data/projects";
 import { asset } from "@/lib/asset";
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
@@ -18,10 +18,7 @@ export default function ProjectStory({ project, onClose }: Props) {
     <div className="bg-black text-white min-h-screen">
       <Header onClose={onClose} />
       <Hero project={project} />
-      <Info project={project} accent="#FFFFFF" />
-      {project.stats && project.stats.length > 0 && (
-        <Stats stats={project.stats} />
-      )}
+      <Info project={project} />
       {project.gallery && project.gallery.length > 0 && (
         <Gallery items={project.gallery} title={project.title} />
       )}
@@ -159,61 +156,125 @@ function Hero({ project }: { project: Project }) {
 
 /* ───────────────────────── info ───────────────────────── */
 
-function Info({ project }: { project: Project; accent: string }) {
+function Info({ project }: { project: Project }) {
   return (
-    <section className="px-6 sm:px-10 lg:px-20 py-32 sm:py-44">
-      <div className="max-w-5xl mx-auto">
-        {project.dek && (
+    <>
+      {/* DEK — marquee statement, centered with generous padding */}
+      {project.dek && (
+        <section className="relative px-6 sm:px-10 lg:px-20 py-36 sm:py-52">
           <motion.p
             initial={{ y: 30, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, margin: "-120px" }}
-            transition={{ duration: 0.8, ease: EASE_OUT }}
-            className="font-helvetica font-medium leading-[1.18] tracking-[-0.01em] mb-16 sm:mb-24 text-white"
-            style={{
-              fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
-            }}
+            viewport={{ once: true, margin: "-150px" }}
+            transition={{ duration: 0.9, ease: EASE_OUT }}
+            className="font-helvetica font-medium text-center leading-[1.08] tracking-[-0.02em] text-white max-w-5xl mx-auto"
+            style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.75rem)" }}
           >
             {project.dek}
           </motion.p>
-        )}
+        </section>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-10">
-          <motion.p
-            initial={{ y: 24, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.05 }}
-            className="md:col-span-7 text-base sm:text-[17px] leading-[1.7] text-white/85 max-w-[60ch]"
-          >
-            {project.description}
-          </motion.p>
+      {/* OVERVIEW */}
+      <SectionRow label="Overview">
+        <p className="text-lg sm:text-xl lg:text-[1.375rem] leading-[1.5] text-white max-w-[58ch]">
+          {project.description}
+        </p>
+      </SectionRow>
 
-          {project.bullets.length > 0 && (
-            <ul className="md:col-span-5 flex flex-col gap-3.5">
-              {project.bullets.map((b, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ y: 18, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{
-                    duration: 0.55,
-                    ease: EASE_OUT,
-                    delay: 0.18 + i * 0.07,
-                  }}
-                  className="flex gap-3 text-sm sm:text-[15px] leading-[1.6] text-white/90"
+      {/* ROLES */}
+      {project.bullets.length > 0 && (
+        <SectionRow label="Roles">
+          <ul className="flex flex-col">
+            {project.bullets.map((b, i) => (
+              <motion.li
+                key={i}
+                initial={{ y: 18, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{
+                  duration: 0.55,
+                  ease: EASE_OUT,
+                  delay: i * 0.07,
+                }}
+                className="grid grid-cols-[auto_1fr] gap-6 sm:gap-12 py-6 sm:py-8 items-baseline border-t border-white/10 first:border-t-0"
+              >
+                <span className="text-[11px] uppercase tracking-[0.22em] tnum text-white/55">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-base sm:text-lg lg:text-xl leading-[1.5] text-white max-w-[55ch]">
+                  {b}
+                </span>
+              </motion.li>
+            ))}
+          </ul>
+        </SectionRow>
+      )}
+
+      {/* NUMBERS */}
+      {project.stats && project.stats.length > 0 && (
+        <SectionRow label="By the Numbers">
+          <div className="grid grid-cols-2 gap-y-16 sm:gap-y-24 gap-x-10 sm:gap-x-16">
+            {project.stats.map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{
+                  duration: 0.7,
+                  ease: EASE_OUT,
+                  delay: i * 0.08,
+                }}
+              >
+                <div
+                  className="font-serif font-medium leading-[0.9] tracking-[-0.015em] text-white"
+                  style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)" }}
                 >
-                  <span
-                    aria-hidden
-                    className="mt-[10px] w-1 h-1 rounded-full shrink-0 bg-white"
-                  />
-                  <span>{b}</span>
-                </motion.li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  {s.value}
+                </div>
+                <div className="font-helvetica mt-4 sm:mt-5 text-[14px] sm:text-[15px] leading-[1.45] text-white whitespace-pre-line max-w-[24ch]">
+                  {s.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </SectionRow>
+      )}
+    </>
+  );
+}
+
+function SectionRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="px-6 sm:px-10 lg:px-20 py-24 sm:py-36 border-t border-white/10">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-10">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
+          className="md:col-span-3"
+        >
+          <span className="text-[11px] uppercase tracking-[0.28em] text-white/55">
+            {label}
+          </span>
+        </motion.div>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
+          className="md:col-span-9"
+        >
+          {children}
+        </motion.div>
       </div>
     </section>
   );
@@ -221,37 +282,6 @@ function Info({ project }: { project: Project; accent: string }) {
 
 /* ───────────────────────── stats ───────────────────────── */
 
-function Stats({ stats }: { stats: ProjectStat[] }) {
-  return (
-    <section className="px-6 sm:px-10 lg:px-20 py-24 sm:py-36 border-t border-white/10">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 gap-y-16 sm:gap-y-24 gap-x-10 sm:gap-x-16">
-        {stats.map((s, i) => (
-          <motion.div
-            key={i}
-            initial={{ y: 40, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{
-              duration: 0.7,
-              ease: EASE_OUT,
-              delay: i * 0.08,
-            }}
-          >
-            <div
-              className="font-serif font-medium leading-[0.9] tracking-[-0.015em] text-white"
-              style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)" }}
-            >
-              {s.value}
-            </div>
-            <div className="font-helvetica mt-4 sm:mt-5 text-[14px] sm:text-[15px] leading-[1.4] text-white whitespace-pre-line">
-              {s.label}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-}
 
 /* ───────────────────────── gallery ───────────────────────── */
 
